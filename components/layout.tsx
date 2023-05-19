@@ -37,7 +37,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
             </svg>
           </div>
           <div className="flex justify-center items-center px-1 border-[1.5px] rounded-xl">
-            <div className="w-5 h-5 bg-white rounded-full" />
+            <div className="w-5 h-5 bg-slate-300 rounded-full" />
             <div className="ml-1">me</div>
           </div>
         </div>
