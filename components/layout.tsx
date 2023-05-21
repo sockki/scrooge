@@ -11,7 +11,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
       <Head>
         <title>{seotitle} | scrooge</title>
       </Head>
-      <div className="bg-[#161616] w-full max-w-lg px-10 py-3 fixed text-white border-b-0 top-0 flex justify-between">
+      <div className="bg-[#161616] w-full max-w-lg z-50 px-10 py-3 fixed text-white border-b-0 top-0 flex justify-between">
         <span className="text-lg font-serif">scrooge</span>
         <div className="flex justify-center items-center space-x-2">
           <div className="w-7 h-7 bg-white rounded-full hover:bg-gray-200 shadow-md flex justify-center items-center">
@@ -36,7 +36,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
               </g>
             </svg>
           </div>
-          <div className="flex justify-center items-center px-1 border-[1.5px] rounded-xl">
+          <div className="flex justify-center items-center px-1 py-1 border-[1.5px] rounded-xl hover:bg-gray-800">
             <div className="w-5 h-5 bg-slate-300 rounded-full" />
             <div className="ml-1">me</div>
           </div>
