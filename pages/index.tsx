@@ -9,13 +9,16 @@ export default function Home() {
           {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
             <Link
               key={i}
-              className="w-4/5 h-60 rounded-md bg-slate-100 flex flex-col"
+              className="w-4/5 h-60 rounded-md bg-white flex flex-col"
               href={`post/${i}`}
             >
               <div className="pl-4 py-3 relative">
-                <div className="absolute left-3 top-4 flex justify-center items-center space-x-1">
-                  <div className="w-5 h-5 rounded-full bg-slate-500" />
-                  <div className="text-black">minjun</div>
+                <div className="absolute left-3 top-4 flex flex-col ">
+                  <div className="flex justify-center items-center space-x-1">
+                    <div className="w-5 h-5 rounded-full bg-slate-500" />
+                    <div className="text-gray-800 font-bold">minjun</div>
+                  </div>
+                  <div className="text-black text-[1px] ml-2">05/22 13:15</div>
                 </div>
                 <div className="mt-16 flex flex-col">
                   <span className="text-gray-800 text-xl font-semibold">
