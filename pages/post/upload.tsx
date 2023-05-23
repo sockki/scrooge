@@ -1,4 +1,6 @@
-export default function upload() {
+import { NextPage } from "next";
+
+const Upload:NextPage = () => {
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -41,3 +43,5 @@ export default function upload() {
     </div>
   );
 }
+
+export default Upload;

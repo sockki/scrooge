@@ -1,7 +1,8 @@
 import Layout from "@/components/layout";
+import { NextPage } from "next";
 import Link from "next/link";
 
-export default function Home() {
+const Home:NextPage = () => {
   return (
     <div>
       <Layout seotitle="title">
@@ -18,7 +19,7 @@ export default function Home() {
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
                     <div className="text-gray-800 font-bold">minjun</div>
                   </div>
-                  <div className="text-black text-[1px] ml-2">05/22 13:15</div>
+                  <div className="text-black text-[1px] ml-4">05/22 13:15</div>
                 </div>
                 <div className="mt-16 flex flex-col">
                   <span className="text-gray-800 text-xl font-semibold">
@@ -68,3 +69,6 @@ export default function Home() {
     </div>
   );
 }
+
+
+export default Home;

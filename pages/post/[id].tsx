@@ -1,6 +1,7 @@
 import Layout from "@/components/layout";
+import { NextPage } from "next";
 
-export default function post() {
+const Post:NextPage = () => {
   return (
     <Layout seotitle="post">
       <div className="flex flex-col justify-center items-center py-10">
@@ -73,7 +74,7 @@ export default function post() {
                   <div className="flex justify-center items-center">
                     <span className="text-black text-[1.5px]">05/22 14:00</span>
                   </div>
-                  <div className="flex justify-center items-center hover:bg-red-200 rounded-xl">
+                  <div className="flex justify-center items-center hover:bg-yellow-200 rounded-xl">
                     <span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -110,3 +111,5 @@ export default function post() {
     </Layout>
   );
 }
+
+export default Post;
