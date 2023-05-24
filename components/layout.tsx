@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 
+
 interface LayoutProps {
   seotitle: string;
   children: React.ReactNode;
