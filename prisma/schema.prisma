@@ -15,8 +15,71 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   nickname  String
-  character String?
-  saved     Int
+  character Int?     @default(1)
+  saved     Int?     @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Post      Post[]
+  Answer    Answer[]
+  Vote      Vote[]
+  Like      Like[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  what      String
+  money     Int
+  Answer    Answer[]
+  goVote    Vote[]   @relation(name: "goVote")
+  stopVote  Vote[]   @relation(name: "stopVote")
+
+  @@index([userId])
+}
+
+model Answer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  Like      Like[]
+
+  @@index([userId])
+  @@index([postId])
+}
+
+model Vote {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  gopost     Post     @relation(name: "goVote", fields: [gopostId], references: [id], onDelete: Cascade)
+  gopostId   Int
+  stoppost   Post     @relation(name: "stopVote", fields: [stoppostId], references: [id], onDelete: Cascade)
+  stoppostId Int
+
+  @@index([userId])
+  @@index([gopostId])
+  @@index([stoppostId])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  answerId  Int
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId    Int
+
+  @@index([answerId])
+  @@index([userId])
 }
