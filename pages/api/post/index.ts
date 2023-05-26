@@ -11,8 +11,29 @@ async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseType>
 ) {
-    if (req.method === "GET") {
-        
+    if(req.method === "GET") {
+        const posts = await client.post.findMany({
+            include: {
+                user: {
+                    select: {
+                        id:true,
+                        nickname: true,
+                        character: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        Answer:true,
+                        goVote: true,
+                        stopVote: true,
+                    }
+                }
+            }
+        });
+        res.json({
+            ok:true,
+            posts,
+        })
     }
     if (req.method === "POST") {
         const {
@@ -21,7 +42,7 @@ async function handler(
         } = req;
         const newpost = await client.post.create({
             data: {
-                money:price,
+                money:Number(price),
                 what,
                 description, 
                 user: {

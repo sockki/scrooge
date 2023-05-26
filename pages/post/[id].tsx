@@ -47,7 +47,7 @@ const Post:NextPage = () => {
                   >
                     <path
                       d="M1662.178 0v1359.964h-648.703l-560.154 560.154v-560.154H0V0h1662.178ZM1511.07 151.107H151.107v1057.75h453.321v346.488l346.489-346.488h560.154V151.107ZM906.794 755.55v117.53H453.32V755.55h453.473Zm302.063-302.365v117.529H453.32V453.185h755.536Z"
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                     />
                   </svg>
                 </span>
@@ -59,7 +59,7 @@ const Post:NextPage = () => {
         </div>
         <div className="flex flex-col space-y-3 w-4/5 mt-4 mb-52">
           {[1, 1, 1, 1, 1].map((_, i) => (
-            <div className="w-full h-auto rounded-md bg-white flex flex-col">
+            <div key={i} className="w-full h-auto rounded-md bg-white flex flex-col">
               <div className="pl-4 py-3 relative">
                 <div className="absolute left-3 top-4 flex flex-col ">
                   <div className="flex justify-center items-center space-x-1">
@@ -86,9 +86,9 @@ const Post:NextPage = () => {
                         <path
                           d="M8 10V20M8 10L4 9.99998V20L8 20M8 10L13.1956 3.93847C13.6886 3.3633 14.4642 3.11604 15.1992 3.29977L15.2467 3.31166C16.5885 3.64711 17.1929 5.21057 16.4258 6.36135L14 9.99998H18.5604C19.8225 9.99998 20.7691 11.1546 20.5216 12.3922L19.3216 18.3922C19.1346 19.3271 18.3138 20 17.3604 20L8 20"
                           stroke="#444444"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       </svg>
                     </span>

@@ -16,7 +16,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
         <title>{`${seotitle} | scrooge`}</title>
       </Head>
       <div className="bg-[#161616] w-full max-w-lg z-50 px-10 py-3 fixed text-white border-b-0 top-0 flex justify-between">
-        <span className="text-lg font-serif">scrooge</span>
+        <Link href={"/"} className="text-lg font-serif">scrooge</Link>
         <div className="flex justify-center items-center space-x-2">
           <Link href={`/post/upload`} className="w-7 h-7 bg-white rounded-full hover:bg-gray-200 shadow-md flex justify-center items-center">
             <svg

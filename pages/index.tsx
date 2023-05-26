@@ -1,47 +1,62 @@
 import Layout from "@/components/layout";
 import { NextPage } from "next";
 import Link from "next/link";
-import useUser from "@/libs/useUser"
+import  useSWR from "swr";
+import { Post, User } from "@prisma/client";
+
+interface PostWithUser extends Post {
+  user: User;
+  _count: {
+    Answer:Number;
+    goVote: Number;
+    stopVote: Number;
+  }
+}
+
+interface PostsRes {
+  posts:PostWithUser[];
+}
 
 const Home:NextPage = () => {
-  const {user, isLoading} = useUser()
+  const { data }  = useSWR<PostsRes>(`/api/post`);
+  console.log(data);
   return (
     <div>
       <Layout seotitle="title">
         <div className="flex flex-col space-y-6 justify-center items-center py-10">
-          {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+          {data?.posts?.map((post) => (
             <Link
-              key={i}
+              key={post?.id}
               className="w-4/5 h-60 rounded-md bg-white flex flex-col"
-              href={`post/${i}`}
+              href={`post/${post?.id}`}
             >
               <div className="pl-4 py-3 relative">
                 <div className="absolute left-3 top-4 flex flex-col ">
                   <div className="flex justify-center items-center space-x-1">
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
-                    <div className="text-gray-800 font-bold">minjun</div>
+                    <div className="text-gray-800 text-sm font-bold">{post?.user?.nickname}</div>
                   </div>
-                  <div className="text-black text-[1px] ml-4">05/22 13:15</div>
+                  <div className="text-black text-[1px] ml-4">{`${String(post?.createdAt).substring(0,10)}  ${String(post?.createdAt).substring(11,16)}`}</div>
                 </div>
                 <div className="mt-16 flex flex-col">
                   <span className="text-gray-800 text-xl font-semibold">
-                    5000원
+                    {`${post?.money}원`}
                   </span>
-                  <span className="text-gray-800 text-lg">스벅 아메리카노</span>
-                  <span className="text-gray-800 text-sm">가능할까요</span>
+                  <span className="text-gray-800 text-lg">{post?.what}</span>
+                  <span className="text-gray-800 text-sm">{post?.description}</span>
                 </div>
                 <div className="flex space-x-3 mt-10">
                   <div className="flex">
                     <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
                       Buy!
                     </div>
-                    <span className="text-gray-800 text-sm ml-1">5</span>
+                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.goVote}`}</span>
                   </div>
                   <div className="flex">
                     <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
                       Save!
                     </div>
-                    <span className="text-gray-800 text-sm ml-1">3</span>
+                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.stopVote}`}</span>
                   </div>
 
                   <div className="flex space-x-1">
@@ -59,7 +74,7 @@ const Home:NextPage = () => {
                         />
                       </svg>
                     </span>
-                    <span className="text-gray-800 text-sm">2</span>
+                    <span className="text-gray-800 text-sm">{`${post?._count?.Answer}`}</span>
                   </div>
                 </div>
               </div>

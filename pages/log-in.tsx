@@ -68,7 +68,7 @@ const Login:NextPage = () => {
               {...register("email", { required: "Write your email please." })}
             />
           </div>
-          <span className="ml-36 font-mono text-sky-700">{errors?.email?.message}</span>
+          <span className="ml-36 font-mono text-yellow-500">{errors?.email?.message}</span>
         </div>
         <div className="flex items-center justify-center space-x-2">
           <button className="mt-5 w-2/5 rounded-lg bg-yellow-500 text-gray-100 text-lg hover:bg-yellow-600">Login</button>

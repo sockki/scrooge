@@ -33,7 +33,7 @@ model Post {
   userId      Int
   what        String
   money       Int
-  description String
+  description String?
   Answer      Answer[]
   goVote      Vote[]   @relation(name: "goVote")
   stopVote    Vote[]   @relation(name: "stopVote")
