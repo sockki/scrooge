@@ -1,6 +1,25 @@
+import useMutation from "@/libs/useMutation";
+import { Post } from "@prisma/client";
 import { NextPage } from "next";
+import { useForm } from "react-hook-form";
 
-const Upload:NextPage = () => {
+interface Iupload {
+  price: Number;
+  what: string;
+  description: string;
+}
+
+interface Uploadgea {
+  ok: boolean;
+  newpost: Post;
+}
+
+const Upload: NextPage = () => {
+  const { register, handleSubmit, formState: { errors }} = useForm<Iupload>();
+  const [uploadpost, { data, loading }] = useMutation<Uploadgea>("/api/post");
+  const onValid = () => {
+
+  }
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -8,7 +27,8 @@ const Upload:NextPage = () => {
         <div className="text-xl mt-2">글올리기</div>
       </div>
       <div className="flex flex-col justify-center items-center pt-10">
-        <form className="flex flex-col space-y-5 w-2/3">
+        <form className="flex flex-col space-y-5 w-2/3"
+        onSubmit={handleSubmit}>
           <div className="flex flex-col ">
             <span className="text-xl mb-2">얼마인가요?</span>
             <div className="flex">
@@ -42,6 +62,6 @@ const Upload:NextPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Upload;

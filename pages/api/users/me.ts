@@ -15,12 +15,16 @@ async function handler(
     const {
       session: { user },
     } = req;
+    if(user === undefined) {
+      return res.json({
+        ok:false
+      })
+    }
     const dbUser = await client.user.findUnique({
       where: {
         id: user?.id,
       },
     });
-
     return res.json({
       ok: true,
       dbUser,

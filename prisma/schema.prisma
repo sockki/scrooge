@@ -26,16 +26,17 @@ model User {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  what      String
-  money     Int
-  Answer    Answer[]
-  goVote    Vote[]   @relation(name: "goVote")
-  stopVote  Vote[]   @relation(name: "stopVote")
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  what        String
+  money       Int
+  description String
+  Answer      Answer[]
+  goVote      Vote[]   @relation(name: "goVote")
+  stopVote    Vote[]   @relation(name: "stopVote")
 
   @@index([userId])
 }
@@ -77,7 +78,7 @@ model Like {
   updatedAt DateTime @updatedAt
   answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
   answerId  Int
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
 
   @@index([answerId])

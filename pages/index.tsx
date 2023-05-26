@@ -1,8 +1,10 @@
 import Layout from "@/components/layout";
 import { NextPage } from "next";
 import Link from "next/link";
+import useUser from "@/libs/useUser"
 
 const Home:NextPage = () => {
+  const {user, isLoading} = useUser()
   return (
     <div>
       <Layout seotitle="title">

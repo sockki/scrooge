@@ -1,3 +1,4 @@
+import useUser from "@/libs/useUser";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -8,10 +9,11 @@ interface LayoutProps {
 }
 
 export default function Layout({ seotitle, children }: LayoutProps) {
+  const {user, isLoading} = useUser();
   return (
     <div>
       <Head>
-        <title>{seotitle} | scrooge</title>
+        <title>{`${seotitle} | scrooge`}</title>
       </Head>
       <div className="bg-[#161616] w-full max-w-lg z-50 px-10 py-3 fixed text-white border-b-0 top-0 flex justify-between">
         <span className="text-lg font-serif">scrooge</span>
@@ -40,7 +42,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
           </Link>
           <Link href={`/profile`} className="flex justify-center items-center px-1 py-1 border-[1.5px] rounded-xl hover:bg-gray-600">
             <div className="w-5 h-5 bg-slate-300 rounded-full" />
-            <div className="ml-1">me</div>
+            <div className="ml-1 text-xs font-sans">{user?.nickname}</div>
           </Link>
         </div>
       </div>
