@@ -1,7 +1,61 @@
 import Layout from "@/components/layout";
+import useMutation from "@/libs/useMutation";
+import { Answer, Post, User } from "@prisma/client";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
-const Post:NextPage = () => {
+interface AnswerWithUser extends Answer {
+  user: User;
+}
+
+interface PostWithUser extends Post {
+  user: User;
+  Answer: AnswerWithUser[];
+}
+
+interface IPostDetail {
+  ok: boolean;
+  post: PostWithUser;
+  isgoed: boolean;
+  isstoped: boolean;
+  gonum: number;
+  stopnum: number;
+  answernum: number;
+}
+
+interface Ianswer {
+  content: string;
+}
+
+interface ansMutation {
+  ok: boolean;
+  newans: Answer;
+}
+
+const VotePost: NextPage = () => {
+  const router = useRouter();
+
+  const { data, mutate } = useSWR<IPostDetail>(
+    router.query.id ? `/api/post/${router.query.id}` : null
+  );
+
+  const [uploadans, { data: ansdata, loading: ansloading }] = useMutation<ansMutation>(
+    `/api/post/${router.query.id}/answer`
+  );
+  const { register, handleSubmit, reset,formState: { errors }} = useForm<Ianswer>();
+  const onValid = (data: Ianswer) => {
+    if(ansloading) return;
+    uploadans(data);
+  };
+  useEffect(() => {
+    if(ansdata && ansdata.ok) {
+      reset();
+      mutate();
+    }
+  }, [ansdata, reset]);
   return (
     <Layout seotitle="post">
       <div className="flex flex-col justify-center items-center py-10">
@@ -10,30 +64,43 @@ const Post:NextPage = () => {
             <div className="absolute left-3 top-4 flex flex-col ">
               <div className="flex justify-center items-center space-x-1">
                 <div className="w-5 h-5 rounded-full bg-slate-500" />
-                <div className="text-gray-800 font-bold">minjun</div>
+                <div className="text-gray-800 font-bold">
+                  {data?.post?.user?.nickname}
+                </div>
               </div>
-              <div className="text-black text-[1px] ml-4">05/22 13:15</div>
+              <div className="text-black text-[1px] ml-4">{`${String(
+                data?.post?.createdAt
+              ).substring(0, 10)}  ${String(data?.post?.createdAt).substring(
+                11,
+                16
+              )}`}</div>
             </div>
             <div></div>
             <div className="mt-16 flex flex-col">
               <span className="text-gray-800 text-xl font-semibold">
-                5000원
+                {data?.post?.money}원
               </span>
-              <span className="text-gray-800 text-lg">스벅 아메리카노</span>
-              <span className="text-gray-800 text-sm">가능할까요</span>
+              <span className="text-gray-800 text-lg">{data?.post?.what}</span>
+              <span className="text-gray-800 text-sm">
+                {data?.post?.description}
+              </span>
             </div>
             <div className="flex space-x-3 mt-10">
               <div className="flex">
                 <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
                   Buy!
                 </div>
-                <span className="text-gray-800 text-sm ml-1">5</span>
+                <span className="text-gray-800 text-sm ml-1">
+                  {data?.gonum}
+                </span>
               </div>
               <div className="flex">
                 <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
                   Save!
                 </div>
-                <span className="text-gray-800 text-sm ml-1">3</span>
+                <span className="text-gray-800 text-sm ml-1">
+                  {data?.stopnum}
+                </span>
               </div>
 
               <div className="flex space-x-1">
@@ -51,28 +118,38 @@ const Post:NextPage = () => {
                     />
                   </svg>
                 </span>
-                <span className="text-gray-800 text-sm">5</span>
+                <span className="text-gray-800 text-sm">{data?.answernum}</span>
               </div>
             </div>
           </div>
           <div></div>
         </div>
         <div className="flex flex-col space-y-3 w-4/5 mt-4 mb-52">
-          {[1, 1, 1, 1, 1].map((_, i) => (
-            <div key={i} className="w-full h-auto rounded-md bg-white flex flex-col">
+          {data?.post?.Answer?.map((ans) => (
+            <div
+              key={ans.id}
+              className="w-full h-auto rounded-md bg-white flex flex-col"
+            >
               <div className="pl-4 py-3 relative">
                 <div className="absolute left-3 top-4 flex flex-col ">
                   <div className="flex justify-center items-center space-x-1">
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
-                    <div className="text-gray-800 font-bold">sswoo</div>
+                    <div className="text-gray-800 font-bold">
+                      {ans?.user?.nickname}
+                    </div>
                   </div>
                 </div>
-                <div className="mt-10 ml-4">
-                  <span className="text-gray-800">정신 나가셨나요..?</span>
+                <div className="mt-10 ml-1">
+                  <span className="text-gray-800">{ans?.content}</span>
                 </div>
                 <div className="flex space-x-3 mt-2">
                   <div className="flex justify-center items-center">
-                    <span className="text-black text-[1.5px]">05/22 14:00</span>
+                    <span className="text-black text-[1.5px]">{`${String(
+                      ans?.createdAt
+                    ).substring(0, 10)}  ${String(ans?.createdAt).substring(
+                      11,
+                      16
+                    )}`}</span>
                   </div>
                   <div className="flex justify-center items-center hover:bg-yellow-200 rounded-xl">
                     <span>
@@ -99,9 +176,19 @@ const Post:NextPage = () => {
             </div>
           ))}
         </div>
-        <div className="fixed border-[1.5px] pt-8 pb-2 shadow-lg w-full max-w-md h-28 bottom-0 rounded-t-lg bg-white hover:h-56 group transition">
-          <form className="grid gap-4 ">
-            <textarea className="h-5 pl-1 border-[1.5px] border-gray-200 rounded-md shadow-sm w-3/4 mx-auto text-gray-900 group-hover:h-32  focus:outline-none focus:ring-2 focus:ring-yellow-500 transition" />
+        <div className="fixed border-[1.5px] pt-8 shadow-lg w-full max-w-md h-28 bottom-0 pb-3 rounded-t-lg bg-white hover:h-56 group transition">
+          <form className="grid gap-2" onSubmit={handleSubmit(onValid)}>
+            <textarea
+              className="h-5 pl-1 border-[1.5px] border-gray-200 rounded-md shadow-sm w-3/4 mx-auto text-gray-900 text-sm group-hover:h-32  focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+              {...register("content", {
+                required: true,
+                minLength: {
+                  message: "5자 이상 입력하세요!",
+                  value: 5,
+                },
+              })}
+            />
+            <span className="flex items-center justify-center font-mono text-yellow-600 text-sm">{errors?.content?.message}</span>
             <button className="bg-yellow-500 text-gray-100 font-mono rounded-md py-1 border-black w-40 mx-auto">
               Answer!
             </button>
@@ -110,6 +197,6 @@ const Post:NextPage = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Post;
+export default VotePost;

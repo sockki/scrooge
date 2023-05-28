@@ -19,7 +19,6 @@ interface PostsRes {
 
 const Home:NextPage = () => {
   const { data }  = useSWR<PostsRes>(`/api/post`);
-  console.log(data);
   return (
     <div>
       <Layout seotitle="title">
