@@ -8,8 +8,8 @@ interface PostWithUser extends Post {
   user: User;
   _count: {
     Answer:Number;
-    goVote: Number;
-    stopVote: Number;
+    GoVote: Number;
+    StopVote: Number;
   }
 }
 
@@ -23,7 +23,7 @@ const Home:NextPage = () => {
     <div>
       <Layout seotitle="title">
         <div className="flex flex-col space-y-6 justify-center items-center py-10">
-          {data?.posts?.map((post) => (
+          {data?.posts?.slice(0)?.reverse().map((post) => (
             <Link
               key={post?.id}
               className="w-4/5 h-60 rounded-md bg-white flex flex-col"
@@ -31,7 +31,7 @@ const Home:NextPage = () => {
             >
               <div className="pl-4 py-3 relative">
                 <div className="absolute left-3 top-4 flex flex-col ">
-                  <div className="flex justify-center items-center space-x-1">
+                  <div className="flex  items-center space-x-1">
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
                     <div className="text-gray-800 text-sm font-bold">{post?.user?.nickname}</div>
                   </div>
@@ -46,16 +46,16 @@ const Home:NextPage = () => {
                 </div>
                 <div className="flex space-x-3 mt-10">
                   <div className="flex">
-                    <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
+                    <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600">
                       Buy!
                     </div>
-                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.goVote}`}</span>
+                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.GoVote}`}</span>
                   </div>
                   <div className="flex">
-                    <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
+                    <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600">
                       Save!
                     </div>
-                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.stopVote}`}</span>
+                    <span className="text-gray-800 text-sm ml-1">{`${post?._count?.StopVote}`}</span>
                   </div>
 
                   <div className="flex space-x-1">

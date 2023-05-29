@@ -1,5 +1,6 @@
 import Layout from "@/components/layout";
 import useMutation from "@/libs/useMutation";
+import { cls } from "@/libs/utils";
 import { Answer, Post, User } from "@prisma/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -37,25 +38,104 @@ interface ansMutation {
 
 const VotePost: NextPage = () => {
   const router = useRouter();
-
+  // post 데이터
   const { data, mutate } = useSWR<IPostDetail>(
     router.query.id ? `/api/post/${router.query.id}` : null
   );
 
-  const [uploadans, { data: ansdata, loading: ansloading }] = useMutation<ansMutation>(
-    `/api/post/${router.query.id}/answer`
+  // 댓글 달기
+  const [uploadans, { data: ansdata, loading: ansloading }] =
+    useMutation<ansMutation>(`/api/post/${router.query.id}/answer`);
+
+  // go투표
+  const [togglego, { loading: goloading }] = useMutation(
+    `/api/post/${router.query.id}/govote`
   );
-  const { register, handleSubmit, reset,formState: { errors }} = useForm<Ianswer>();
+
+  // stop투표
+  const [togglestop, { loading: stoploading }] = useMutation(
+    `/api/post/${router.query.id}/stopvote`
+  );
+
+  // 댓글 다는 process
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Ianswer>();
   const onValid = (data: Ianswer) => {
-    if(ansloading) return;
+    if (ansloading) return;
     uploadans(data);
   };
   useEffect(() => {
-    if(ansdata && ansdata.ok) {
+    if (ansdata && ansdata.ok) {
       reset();
       mutate();
     }
   }, [ansdata, reset]);
+
+  // 투표 process
+  const ongoClick = () => {
+    if (!goloading) {
+      togglego({});
+    }
+    if (!data) return;
+    
+    if (data.isstoped) {
+      mutate(
+        {
+          ...data,
+          isgoed: !data.isgoed,
+          isstoped: !data.isstoped,
+          stopnum: data.isstoped ? data.stopnum - 1 : data.stopnum + 1,
+          gonum: data.isgoed ? data.gonum - 1 : data.gonum + 1,
+        },
+        false
+      );
+    } else {
+      mutate(
+        {
+          ...data,
+          isgoed: !data.isgoed,
+          gonum: data.isgoed ? data.gonum - 1 : data.gonum + 1,
+        },
+        false
+      );
+    }
+    
+  };
+
+  const onstopClick = () => {
+    if (!stoploading) {
+      togglestop({});
+    }
+    if (!data) return;
+    
+    if (data.isgoed) {
+      mutate(
+        {
+          ...data,
+          isgoed: !data.isgoed,
+          isstoped: !data.isstoped,
+          stopnum: data.isstoped ? data.stopnum - 1 : data.stopnum + 1,
+          gonum: data.isgoed ? data.gonum - 1 : data.gonum + 1,
+        },
+        false
+      );
+    } else {
+      mutate(
+        {
+          ...data,
+          isstoped: !data.isstoped,
+          stopnum: data.isstoped ? data.stopnum - 1 : data.stopnum + 1,
+        },
+        false
+      );
+    }
+    
+  };
+
   return (
     <Layout seotitle="post">
       <div className="flex flex-col justify-center items-center py-10">
@@ -87,7 +167,13 @@ const VotePost: NextPage = () => {
             </div>
             <div className="flex space-x-3 mt-10">
               <div className="flex">
-                <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
+                <div
+                  onClick={ongoClick}
+                  className={cls(
+                    "text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md",
+                    data?.isgoed ? "bg-yellow-400" : ""
+                  )}
+                >
                   Buy!
                 </div>
                 <span className="text-gray-800 text-sm ml-1">
@@ -95,7 +181,13 @@ const VotePost: NextPage = () => {
                 </span>
               </div>
               <div className="flex">
-                <div className="text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md">
+                <div
+                  onClick={onstopClick}
+                  className={cls(
+                    "text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md",
+                    data?.isstoped ? "bg-yellow-400" : ""
+                  )}
+                >
                   Save!
                 </div>
                 <span className="text-gray-800 text-sm ml-1">
@@ -188,7 +280,9 @@ const VotePost: NextPage = () => {
                 },
               })}
             />
-            <span className="flex items-center justify-center font-mono text-yellow-600 text-sm">{errors?.content?.message}</span>
+            <span className="flex items-center justify-center font-mono text-yellow-600 text-sm">
+              {errors?.content?.message}
+            </span>
             <button className="bg-yellow-500 text-gray-100 font-mono rounded-md py-1 border-black w-40 mx-auto">
               Answer!
             </button>

@@ -12,31 +12,32 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   nickname  String
-  character Int?     @default(1)
-  saved     Int?     @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  character Int?       @default(1)
+  saved     Int?       @default(0)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   Post      Post[]
   Answer    Answer[]
-  Vote      Vote[]
   Like      Like[]
+  GoVote    GoVote[]
+  StopVote  StopVote[]
 }
 
 model Post {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   what        String
   money       Int
   description String?
   Answer      Answer[]
-  goVote      Vote[]   @relation(name: "goVote")
-  stopVote    Vote[]   @relation(name: "stopVote")
+  GoVote      GoVote[]
+  StopVote    StopVote[]
 
   @@index([userId])
 }
@@ -56,20 +57,30 @@ model Answer {
   @@index([postId])
 }
 
-model Vote {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  gopost     Post     @relation(name: "goVote", fields: [gopostId], references: [id], onDelete: Cascade)
-  gopostId   Int
-  stoppost   Post     @relation(name: "stopVote", fields: [stoppostId], references: [id], onDelete: Cascade)
-  stoppostId Int
+model GoVote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
 
   @@index([userId])
-  @@index([gopostId])
-  @@index([stoppostId])
+  @@index([postId])
+}
+
+model StopVote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+
+  @@index([userId])
+  @@index([postId])
 }
 
 model Like {

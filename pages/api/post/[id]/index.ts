@@ -46,18 +46,18 @@ async function handler(
                 ok: false
             })
         }
-        const isgoed = Boolean(await client.vote.findFirst({
+        const isgoed = Boolean(await client.goVote.findFirst({
             where: {
-                gopostId: post?.id,
+                postId: post?.id,
                 userId: user?.id
             },
             select: {
                 id:true
             }
         }));
-        const isstoped = Boolean(await client.vote.findFirst({
+        const isstoped = Boolean(await client.stopVote.findFirst({
             where: {
-                stoppostId: post?.id,
+                postId: post?.id,
                 userId: user?.id
             },
             select: {
@@ -69,19 +69,19 @@ async function handler(
                 id: Number(id),
             },
             select: {
-                goVote: true,
+                GoVote: true,
             }
         });
-        const gonum = goed?.goVote.length;
+        const gonum = goed?.GoVote.length;
         const stoped = await client.post.findFirst({
             where: {
                 id: Number(id),
             },
             select: {
-                stopVote: true,
+                StopVote: true,
             }
         });
-        const stopnum = stoped?.stopVote.length;
+        const stopnum = stoped?.StopVote.length;
         const answered = await client.post.findFirst({
             where: {
                 id: Number(id),
