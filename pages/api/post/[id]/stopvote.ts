@@ -36,6 +36,7 @@ async function handler(
             userId: user?.id
         }
     })
+    console.log(alreadygo, alreadystop)
     // stopvote가 있다면 그것을 삭제, 없다면 govote가 있는지 확인후 있다면 삭제후 stopvote 생성
     if (alreadystop) {
         await client.stopVote.delete({

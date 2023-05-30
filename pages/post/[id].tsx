@@ -142,7 +142,7 @@ const VotePost: NextPage = () => {
         <div className="w-4/5 h-auto rounded-md bg-white flex flex-col">
           <div className="pl-4 py-3 relative">
             <div className="absolute left-3 top-4 flex flex-col ">
-              <div className="flex justify-center items-center space-x-1">
+              <div className="flex items-center space-x-1">
                 <div className="w-5 h-5 rounded-full bg-slate-500" />
                 <div className="text-gray-800 font-bold">
                   {data?.post?.user?.nickname}

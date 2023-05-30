@@ -32,7 +32,7 @@ const Upload: NextPage = () => {
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
-        <span className="absolute left-2">뒤로</span>
+        <button className="absolute left-2" onClick={()=>router.back()}>뒤로</button>
         <div className="text-xl mt-2">글올리기</div>
       </div>
       <div className="flex flex-col justify-center items-center pt-10">
