@@ -37,9 +37,11 @@ async function handler(
     }
     if (req.method === "POST") {
         const {
-            body: { price,what,description },
+            body: { price,what,description,isvote},
             session: { user }
         } = req;
+        console.log(isvote)
+        /*
         const newpost = await client.post.create({
             data: {
                 money:Number(price),
@@ -56,6 +58,7 @@ async function handler(
             ok: true,
             newpost
         });
+        */
     }
 }
 
