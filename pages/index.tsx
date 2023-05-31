@@ -33,7 +33,7 @@ const Home:NextPage = () => {
                 <div className="absolute left-3 top-4 flex flex-col ">
                   <div className="flex  items-center space-x-1">
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
-                    <div className="text-gray-800 text-sm font-bold">{post?.user?.nickname}</div>
+                    <div className="text-gray-800 font-bold">{post?.user?.nickname}</div>
                   </div>
                   <div className="text-black text-[1px] ml-4">{`${String(post?.createdAt).substring(0,10)}  ${String(post?.createdAt).substring(11,16)}`}</div>
                 </div>

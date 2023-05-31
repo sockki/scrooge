@@ -40,25 +40,57 @@ async function handler(
             body: { price,what,description,isvote},
             session: { user }
         } = req;
-        console.log(isvote)
-        /*
-        const newpost = await client.post.create({
-            data: {
-                money:Number(price),
-                what,
-                description, 
-                user: {
-                    connect: {
-                        id: user?.id
+        if (isvote) {
+            const newpost = await client.post.create({
+                data: {
+                    money:Number(price),
+                    what,
+                    description, 
+                    isVote: isvote,
+                    user: {
+                        connect: {
+                            id: user?.id
+                        },
                     },
                 },
-            },
-        });
-        res.json({
-            ok: true,
-            newpost
-        });
-        */
+            });
+            res.json({
+                ok: true,
+                newpost
+            });
+        }
+        else {
+            const newpost = await client.post.create({
+                data: {
+                    money:Number(price),
+                    what, 
+                    isVote: isvote,
+                    user: {
+                        connect: {
+                            id: user?.id
+                        },
+                    },
+                },
+            });
+            const nowuser = await client.user.findFirst({
+                where: {
+                    id: user?.id
+                }
+            })
+            await client.user.update({
+                where: {
+                    id: user?.id
+                },
+                data: {
+                    spended: Number(nowuser?.spended) + Number(price)
+                }
+            })
+            res.json({
+                ok: true,
+                newpost
+            });
+        }
+        
     }
 }
 

@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 interface Iupload {
   price: Number;
   what: string;
-  description: string | null;
+  description?: string | null;
 }
 
 interface Uploadgea {
@@ -25,19 +25,17 @@ const VoteUpload: NextPage = () => {
     formState: { errors },
   } = useForm<Iupload>();
   const [uploadpost, { data, loading }] = useMutation<Uploadgea>("/api/post");
-  const onValidVote = (form: Iupload) => {
-    console.log(form);
-    //if (loading) return;
-    //uploadpost({ ...form, isvote });
+  const onValid = (form: Iupload) => {
+    if (loading) return;
+    uploadpost({ ...form, isvote });
   };
-  const onValidPost = (form: Iupload) => {
-    console.log(form);
-  }
+  
   useEffect(() => {
     if (data && data.ok) {
       router.push(`/post/${data.newpost.id}`);
     }
   }, [data, router]);
+  
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -50,7 +48,7 @@ const VoteUpload: NextPage = () => {
         {isvote ? (
           <form
             className="flex flex-col space-y-5 w-2/3"
-            onSubmit={handleSubmit(onValidVote)}
+            onSubmit={handleSubmit(onValid)}
           >
             <div className="flex flex-col ">
               <span className="text-xl mb-2">얼마인가요?</span>
@@ -94,7 +92,7 @@ const VoteUpload: NextPage = () => {
         ) : (
           <form
             className="flex flex-col space-y-5 w-2/3"
-            onSubmit={handleSubmit(onValidPost)}
+            onSubmit={handleSubmit(onValid)}
           >
             <div className="flex flex-col ">
               <span className="text-xl mb-2">얼마인가요?</span>
