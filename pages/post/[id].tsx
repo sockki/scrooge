@@ -22,8 +22,10 @@ interface IPostDetail {
   post: PostWithUser;
   isgoed: boolean;
   isstoped: boolean;
+  isliked: boolean;
   gonum: number;
   stopnum: number;
+  likenum: number;
   answernum: number;
 }
 
@@ -57,6 +59,11 @@ const VotePost: NextPage = () => {
     `/api/post/${router.query.id}/stopvote`
   );
 
+  // 좋아요
+  const [togglelike, { loading: likeloading }] = useMutation(
+    `/api/post/${router.query.id}/like`
+  );
+
   // 댓글 다는 process
   const {
     register,
@@ -81,7 +88,7 @@ const VotePost: NextPage = () => {
       togglego({});
     }
     if (!data) return;
-    
+
     if (data.isstoped) {
       mutate(
         {
@@ -103,7 +110,6 @@ const VotePost: NextPage = () => {
         false
       );
     }
-    
   };
 
   const onstopClick = () => {
@@ -111,7 +117,7 @@ const VotePost: NextPage = () => {
       togglestop({});
     }
     if (!data) return;
-    
+
     if (data.isgoed) {
       mutate(
         {
@@ -133,135 +139,208 @@ const VotePost: NextPage = () => {
         false
       );
     }
-    
+  };
+  // 좋아요 progress
+  const onlikeClick = () => {
+    if (!goloading) {
+      togglelike({});
+    }
+    if (!data) return;
+    mutate(
+      {
+        ...data,
+        isliked: !data.isliked,
+        likenum: data.isliked ? data.likenum - 1 : data.likenum + 1,
+      },
+      false
+    );
   };
 
   return (
     <Layout seotitle="post">
       <div className="flex flex-col justify-center items-center py-10">
-        <div className="w-4/5 h-auto rounded-md bg-white flex flex-col">
-          <div className="pl-4 py-3 relative">
-            <div className="absolute left-3 top-4 flex flex-col ">
-              <div className="flex items-center space-x-1">
-                <div className="w-5 h-5 rounded-full bg-slate-500" />
-                <div className="text-gray-800 font-bold">
-                  {data?.post?.user?.nickname}
+        {data?.post.isVote ? (
+          <div className="w-4/5 h-auto rounded-md pt-1 flex flex-col">
+            <div className="">
+              <div className="flex flex-col ">
+                <div className="flex items-center space-x-1">
+                  <div className="w-5 h-5 rounded-full bg-slate-500" />
+                  <div className="text-slate-100 font-bold">
+                    {data?.post?.user?.nickname}
+                  </div>
                 </div>
               </div>
-              <div className="text-black text-[1px] ml-4">{`${String(
-                data?.post?.createdAt
-              ).substring(0, 10)}  ${String(data?.post?.createdAt).substring(
-                11,
-                16
-              )}`}</div>
+              <div className="mt-1 bg-white px-2 py-4 rounded-xl flex justify-center items-center flex-col">
+                <span className="text-gray-800 text-xl font-semibold">
+                  {`${data?.post?.money}원`}
+                </span>
+                <span className="text-gray-800 text-lg">
+                  {data?.post?.what}
+                </span>
+                <span className="text-gray-800 text-sm">
+                  {data?.post?.description}
+                </span>
+              </div>
+              <div className="flex justify-between mt-2 ml-1">
+                <div className="flex space-x-2">
+                  <div className="flex">
+                    <button
+                      className={cls(
+                        "px-1 text-sm font-bold rounded-lg border-[1.5px] border-pink-600",
+                        data.isgoed
+                          ? "bg-pink-600 text-[#161616]"
+                          : "text-pink-600"
+                      )}
+                      onClick={ongoClick}
+                    >
+                      Buy!
+                    </button>
+                    <span className="text-pink-600 text-sm ml-1">{`${data?.gonum}`}</span>
+                  </div>
+                  <div className="flex">
+                    <button
+                      className={cls(
+                        "px-1 text-sm font-bold rounded-lg border-[1.5px] border-teal-600",
+                        data.isstoped
+                          ? "bg-teal-600 text-[#161616]"
+                          : "text-teal-600"
+                      )}
+                      onClick={onstopClick}
+                    >
+                      Save!
+                    </button>
+                    <span className="text-teal-600 text-sm ml-1">{`${data?.stopnum}`}</span>
+                  </div>
+                  <div className="flex space-x-1">
+                    <span className="mt-1 ml-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#ffffff"
+                        width="18px"
+                        height="18px"
+                        viewBox="0 0 1920 1920"
+                      >
+                        <path
+                          d="M1662.178 0v1359.964h-648.703l-560.154 560.154v-560.154H0V0h1662.178ZM1511.07 151.107H151.107v1057.75h453.321v346.488l346.489-346.488h560.154V151.107ZM906.794 755.55v117.53H453.32V755.55h453.473Zm302.063-302.365v117.529H453.32V453.185h755.536Z"
+                          fillRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-slate-10 text-sm">{`${data?.answernum}`}</span>
+                  </div>
+                </div>
+                <div className="text-slate-10 text-[1px] mr-4 ">{`${String(
+                  data?.post?.createdAt
+                ).substring(0, 10)}  ${String(data?.post?.createdAt).substring(
+                  11,
+                  16
+                )}`}</div>
+              </div>
             </div>
             <div></div>
-            <div className="mt-16 flex flex-col">
-              <span className="text-gray-800 text-xl font-semibold">
-                {data?.post?.money}원
-              </span>
-              <span className="text-gray-800 text-lg">{data?.post?.what}</span>
-              <span className="text-gray-800 text-sm">
-                {data?.post?.description}
-              </span>
-            </div>
-            <div className="flex space-x-3 mt-10">
-              <div className="flex">
-                <div
-                  onClick={ongoClick}
-                  className={cls(
-                    "text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md",
-                    data?.isgoed ? "bg-yellow-400" : ""
-                  )}
-                >
-                  Buy!
-                </div>
-                <span className="text-gray-800 text-sm ml-1">
-                  {data?.gonum}
-                </span>
-              </div>
-              <div className="flex">
-                <div
-                  onClick={onstopClick}
-                  className={cls(
-                    "text-gray-800 px-1 text-sm rounded-lg border-[1.5px] border-gray-600 hover:shadow-md",
-                    data?.isstoped ? "bg-yellow-400" : ""
-                  )}
-                >
-                  Save!
-                </div>
-                <span className="text-gray-800 text-sm ml-1">
-                  {data?.stopnum}
-                </span>
-              </div>
-
-              <div className="flex space-x-1">
-                <span className="mt-1 ml-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="#525252"
-                    width="18px"
-                    height="18px"
-                    viewBox="0 0 1920 1920"
-                  >
-                    <path
-                      d="M1662.178 0v1359.964h-648.703l-560.154 560.154v-560.154H0V0h1662.178ZM1511.07 151.107H151.107v1057.75h453.321v346.488l346.489-346.488h560.154V151.107ZM906.794 755.55v117.53H453.32V755.55h453.473Zm302.063-302.365v117.529H453.32V453.185h755.536Z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-                <span className="text-gray-800 text-sm">{data?.answernum}</span>
-              </div>
-            </div>
           </div>
-          <div></div>
-        </div>
+        ) : (
+          <div className="w-4/5 h-auto rounded-md flex flex-col">
+            <div className="py-3">
+              <div className="flex flex-col ">
+                <div className="flex  items-center space-x-1">
+                  <div className="w-5 h-5 rounded-full bg-slate-500" />
+                  <div className="text-slate-100 font-bold">
+                    {data?.post?.user?.nickname}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-1 bg-white p-2 rounded-xl flex flex-col">
+                <span className="text-gray-800 text-xl font-semibold">
+                  {`-${data?.post?.money}원`}
+                </span>
+                <span className="text-gray-800 text-lg">
+                  {data?.post?.what}
+                </span>
+                <span className="text-gray-800 text-sm">
+                  {data?.post?.description}
+                </span>
+              </div>
+              <div className="flex justify-between space-x-3 mt-1 ml-1">
+                <div className="flex space-x-2">
+                  <div className="flex" onClick={onlikeClick}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22px"
+                      height="22px"
+                      viewBox="0 0 24 24"
+                      fill={cls(data?.isliked ? "#f4f814" : "none")}
+                    >
+                      <path
+                        d="M8 10V20M8 10L4 9.99998V20L8 20M8 10L13.1956 3.93847C13.6886 3.3633 14.4642 3.11604 15.1992 3.29977L15.2467 3.31166C16.5885 3.64711 17.1929 5.21057 16.4258 6.36135L14 9.99998H18.5604C19.8225 9.99998 20.7691 11.1546 20.5216 12.3922L19.3216 18.3922C19.1346 19.3271 18.3138 20 17.3604 20L8 20"
+                        stroke="#f4f814"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span className="text-[#f4f814] text-sm ml-1">{`${data?.likenum}`}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="mt-1 ml-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#ffffff"
+                        width="18px"
+                        height="18px"
+                        viewBox="0 0 1920 1920"
+                      >
+                        <path
+                          d="M1662.178 0v1359.964h-648.703l-560.154 560.154v-560.154H0V0h1662.178ZM1511.07 151.107H151.107v1057.75h453.321v346.488l346.489-346.488h560.154V151.107ZM906.794 755.55v117.53H453.32V755.55h453.473Zm302.063-302.365v117.529H453.32V453.185h755.536Z"
+                          fillRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-slate-100  text-sm ml-1">{`${data?.answernum}`}</span>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-slate-100 text-[1px] mr-4">
+                    {`${String(data?.post?.createdAt).substring(
+                      0,
+                      10
+                    )}  ${String(data?.post?.createdAt).substring(11, 16)}`}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div></div>
+          </div>
+        )}
         <div className="flex flex-col space-y-3 w-4/5 mt-4 mb-52">
           {data?.post?.Answer?.map((ans) => (
             <div
               key={ans.id}
-              className="w-full h-auto rounded-md bg-white flex flex-col"
+              className="w-full h-auto rounded-md flex flex-col"
             >
-              <div className="pl-4 py-3 relative">
-                <div className="absolute left-3 top-4 flex flex-col ">
-                  <div className="flex justify-center items-center space-x-1">
+              <div className="">
+                <div className="flex flex-col ">
+                  <div className="flex space-x-1">
                     <div className="w-5 h-5 rounded-full bg-slate-500" />
-                    <div className="text-gray-800 font-bold">
+                    <div className="text-slate-100 font-bold">
                       {ans?.user?.nickname}
                     </div>
                   </div>
                 </div>
-                <div className="mt-10 ml-1">
+                <div className="mt-1 bg-white p-2 rounded-xl">
                   <span className="text-gray-800">{ans?.content}</span>
                 </div>
-                <div className="flex space-x-3 mt-2">
-                  <div className="flex justify-center items-center">
-                    <span className="text-black text-[1.5px]">{`${String(
-                      ans?.createdAt
-                    ).substring(0, 10)}  ${String(ans?.createdAt).substring(
-                      11,
-                      16
-                    )}`}</span>
+                <div className="flex justify-between space-x-3 mt-1 ml-1">
+                  <div className="flex space-x-2">
+                    <div></div>
                   </div>
-                  <div className="flex justify-center items-center hover:bg-yellow-200 rounded-xl">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18px"
-                        height="18px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <path
-                          d="M8 10V20M8 10L4 9.99998V20L8 20M8 10L13.1956 3.93847C13.6886 3.3633 14.4642 3.11604 15.1992 3.29977L15.2467 3.31166C16.5885 3.64711 17.1929 5.21057 16.4258 6.36135L14 9.99998H18.5604C19.8225 9.99998 20.7691 11.1546 20.5216 12.3922L19.3216 18.3922C19.1346 19.3271 18.3138 20 17.3604 20L8 20"
-                          stroke="#444444"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    <span className="text-gray-800 text-sm">4</span>
+                  <div>
+                    <div className="text-slate-100 text-[1px] mr-4">
+                      {`${String(data?.post?.createdAt).substring(
+                        0,
+                        10
+                      )}  ${String(data?.post?.createdAt).substring(11, 16)}`}
+                    </div>
                   </div>
                 </div>
               </div>

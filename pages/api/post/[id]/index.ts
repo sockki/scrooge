@@ -46,6 +46,15 @@ async function handler(
                 ok: false
             })
         }
+        const isliked = Boolean(await client.like.findFirst({
+            where: {
+                postId: post?.id,
+                userId: user?.id
+            },
+            select: {
+                id:true
+            }
+        }))
         const isgoed = Boolean(await client.goVote.findFirst({
             where: {
                 postId: post?.id,
@@ -82,6 +91,15 @@ async function handler(
             }
         });
         const stopnum = stoped?.StopVote.length;
+        const liked = await client.post.findFirst({
+            where: {
+                id: Number(id),
+            },
+            select: {
+                Like: true
+            }
+        })
+        const likenum = liked?.Like.length
         const answered = await client.post.findFirst({
             where: {
                 id: Number(id),
@@ -96,8 +114,10 @@ async function handler(
             post,
             isgoed,
             isstoped,
+            isliked,
             gonum,
             stopnum,
+            likenum,
             answernum
         })
     }

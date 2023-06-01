@@ -23,7 +23,6 @@ async function handler(
             ok: false
         })
     }
-    console.log("on go")
     const alreadygo = await client.goVote.findFirst({
         where: {
             postId: Number(id),
@@ -36,7 +35,6 @@ async function handler(
             userId: user?.id
         }
     })
-    console.log(alreadygo, alreadystop)
     // govote가 있다면 그것을 삭제, 없다면 stopvote가 있는지 확인후 있다면 삭제후 govote 생성
     if (alreadygo) {
         await client.goVote.delete({

@@ -23,35 +23,22 @@ async function handler(
             ok: false
         })
     }
-    const alreadygo = await client.goVote.findFirst({
+    const alreadylike = await client.like.findFirst({
         where: {
             postId: Number(id),
             userId: user?.id,
         }
     })
-    const alreadystop = await client.stopVote.findFirst({
-        where: {
-            postId: Number(id),
-            userId: user?.id
-        }
-    })
-    // stopvote가 있다면 그것을 삭제, 없다면 govote가 있는지 확인후 있다면 삭제후 stopvote 생성
-    if (alreadystop) {
-        await client.stopVote.delete({
+    
+    if (alreadylike) {
+        await client.like.delete({
             where: {
-                id: alreadystop.id
+                id: alreadylike.id
             }
         })
     }
     else {
-        if (alreadygo) {
-            await client.goVote.delete({
-                where: {
-                    id: alreadygo.id
-                }
-            })
-        }
-        await client.stopVote.create({
+        await client.like.create({
             data: {
                 user: {
                     connect: {

@@ -24,6 +24,7 @@ async function handler(
                 _count: {
                     select: {
                         Answer:true,
+                        Like: true,
                         GoVote: true,
                         StopVote: true,
                     }

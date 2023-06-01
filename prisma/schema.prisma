@@ -54,7 +54,6 @@ model Answer {
   userId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
-  Like      Like[]
 
   @@index([userId])
   @@index([postId])
@@ -90,14 +89,11 @@ model Like {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  answer    Answer?  @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId  Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
-
-  @@index([answerId])
+  
   @@index([userId])
   @@index([postId])
 }
