@@ -6,7 +6,7 @@ const myPost: NextPage = () => {
   return (
     <div>
       <div className="flex flex-col space-y-6 justify-center items-center py-10">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+        {[1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
           <Link
             key={i}
             className="w-4/5 h-60 rounded-md bg-white flex flex-col"

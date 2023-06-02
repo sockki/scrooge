@@ -31,7 +31,7 @@ const Home: NextPage = () => {
               post.isVote ? (
                 <Link
                   key={post?.id}
-                  className="w-4/5 h-auto rounded-md pt-1 flex flex-col"
+                  className="w-4/5 h-auto rounded-md flex flex-col"
                   href={`post/${post?.id}`}
                 >
                   <div className="">

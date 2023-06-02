@@ -362,7 +362,7 @@ const VotePost: NextPage = () => {
             <span className="flex items-center justify-center font-mono text-yellow-600 text-sm">
               {errors?.content?.message}
             </span>
-            <button className="bg-yellow-500 text-gray-100 font-mono rounded-md py-1 border-black w-40 mx-auto">
+            <button className="bg-yellow-400 text-gray-100 font-mono rounded-md py-1 border-black w-40 mx-auto">
               Answer!
             </button>
           </form>
