@@ -24,10 +24,7 @@ const Home: NextPage = () => {
     <div>
       <Layout seotitle="title">
         <div className="flex flex-col space-y-6 justify-center items-center py-10">
-          {data?.posts
-            ?.slice(0)
-            ?.reverse()
-            .map((post) =>
+          {data?.posts?.slice(0)?.reverse().map((post) =>
               post.isVote ? (
                 <Link
                   key={post?.id}

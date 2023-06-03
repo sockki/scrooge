@@ -14,21 +14,41 @@ async function handler(
   const {
     session: { user },
   } = req;
-  const mypost = client.post.findMany({
+  const mycomments = await client.answer.findMany({
     where: {
-      userId: user?.id,
+      userId: user?.id
     },
     include: {
-      _count: {
+      post: {
         select: {
-          Answer: true,
-          GoVote: true,
-          StopVote: true,
-          Like: true,
-        },
-      },
-    },
+          id:true,
+          isVote:true,
+          money:true,
+          what:true,
+          description:true,
+          user: {
+            select: {
+              id:true,
+              character: true,
+              nickname: true,
+            }
+          },
+          _count: {
+            select: {
+              Like: true,
+              GoVote: true,
+              StopVote: true,
+              Answer: true,
+            }
+          }
+        }
+      }
+    }
   });
+  res.json({
+    ok:true,
+    mycomments
+  })
 }
 
 export default withApiSession(handler);

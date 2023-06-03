@@ -2,10 +2,24 @@ import { NextPage } from "next";
 import Link from "next/link";
 import useUser from "@/libs/useUser";
 import { useRouter } from "next/router";
+import useMutation from "@/libs/useMutation";
+
+interface logoutres {
+  ok:boolean;
+}
 
 const Profile: NextPage = () => {
   const router = useRouter();
   const { user } = useUser();
+  const [logout, { data, loading }] = useMutation<logoutres>("/api/users/log-out");
+  const onlogout = () => {
+    if(loading) return
+    logout({});
+    console.log(data?.ok)
+    if(data && data?.ok) {
+      router.replace("/log-in")
+    }
+  };
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -24,7 +38,10 @@ const Profile: NextPage = () => {
                   내 정보 수정
                 </button>
               </div>
-              <div className="items-center border-[1.5px] border-[#161616] hover:border-slate-100 rounded-md p-1 ">
+              <div
+                className="items-center border-[1.5px] border-[#161616] hover:border-slate-100 rounded-md p-1 "
+                onClick={onlogout}
+              >
                 <span>로그아웃</span>
               </div>
             </div>
