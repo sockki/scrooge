@@ -26,6 +26,7 @@ async function handler(
           money:true,
           what:true,
           description:true,
+          createdAt:true,
           user: {
             select: {
               id:true,

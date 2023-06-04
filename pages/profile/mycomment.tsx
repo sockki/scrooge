@@ -1,6 +1,7 @@
 import { Answer, Post, User } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 
 interface PostWithUser extends Post {
@@ -22,16 +23,23 @@ interface myCommentRes {
 }
 
 const myComment: NextPage = () => {
+  const router = useRouter();
   const { data } = useSWR<myCommentRes>(`/api/users/me/mycomment`);
   return (
-    <div>
+    <div className="pt-1">
+      <div className="relative flex justify-center items-center ">
+        <button className="absolute left-2" onClick={() => router.back()}>
+          뒤로
+        </button>
+        <div className="text-xl mt-2">내 정보</div>
+      </div>
       <div className="flex flex-col space-y-6 justify-center items-center py-10">
           {data?.mycomments?.map((mycomment) =>
               mycomment?.post?.isVote ? (
-                <Link
+                <div
                   key={mycomment?.post?.id}
-                  className="w-4/5 h-auto rounded-md flex flex-col"
-                  href={`post/${mycomment?.post?.id}`}
+                  className="w-4/5 h-auto rounded-md cursor-pointer flex flex-col"
+                  onClick={() => router.push(`/post/${mycomment?.post?.id}`)}
                 >
                   <div className="">
                     <div className="flex flex-col ">
@@ -92,12 +100,12 @@ const myComment: NextPage = () => {
                     </div>
                   </div>
                   <div></div>
-                </Link>
+                </div>
               ) : (
-                <Link
+                <div
                   key={mycomment?.post?.id}
-                  className="w-4/5 h-auto rounded-md flex flex-col"
-                  href={`post/${mycomment?.post?.id}`}
+                  className="w-4/5 h-auto rounded-md cursor-pointer flex flex-col"
+                  onClick={() => router.push(`/post/${mycomment?.post?.id}`)}
                 >
                   <div className="py-3">
                     <div className="flex flex-col ">
@@ -165,7 +173,7 @@ const myComment: NextPage = () => {
                     </div>
                   </div>
                   <div></div>
-                </Link>
+                </div>
               )
             )}
         </div>
