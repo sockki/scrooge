@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IForm {
-  email: string;
+  myid: string;
+  password: string;
 }
 
 const Login:NextPage = () => {
@@ -27,10 +28,14 @@ const Login:NextPage = () => {
         body: JSON.stringify(data)
       });
       if (request.status === 404) {
-        setError("email", { type: "custom", message: "사용자 정보가 존재하지 않습니다." })
+        setError("myid", { type: "custom", message: "사용자 id 정보가 존재하지 않습니다." })
+      }
+      if (request.status === 402) {
+        setError("password", { type: "custom", message: "사용자 비밀번호 정보가 존재하지 않습니다." })
       }
       if (request.status === 200) {
-        router.push("/");
+        alert("로그인이 완료 되었습니다.");
+        router.push("/")
       } else {
         setLoading(false);
       }
@@ -47,7 +52,7 @@ const Login:NextPage = () => {
           안녕하세요! 
         </span>
         <span>
-          이메일로 로그인 하세요!
+          아이디와 비밀번호를 입력해주세요!
         </span>
       </div>
       <form
@@ -55,20 +60,36 @@ const Login:NextPage = () => {
         onSubmit={handleSubmit(onValid)}
       >
         <div>
-          <div className="flex space-x-2 items-center justify-center">
+          <div className="flex items-center justify-center">
             <label
-              className="font-mono text-lg text-gray-500"
-              htmlFor="email"
+              className="font-mono text-lg mr-14 text-gray-500"
+              htmlFor="myid"
             >
-              Email:
+              ID:
             </label>
             <input
               className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
-              type="email"
-              {...register("email", { required: "Write your email please." })}
+              type="text"
+              {...register("myid", { required: "Write your email please." })}
             />
           </div>
-          <span className="ml-36 font-mono text-yellow-500">{errors?.email?.message}</span>
+          <span className="ml-36 font-mono text-yellow-500">{errors?.myid?.message}</span>
+        </div>
+        <div>
+          <div className="flex space-x-2 items-center justify-center">
+            <label
+              className="font-mono text-lg text-gray-500"
+              htmlFor="password"
+            >
+              Password:
+            </label> 
+            <input
+              className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
+              type="text"
+              {...register("password", { required: "Write your email please." })}
+            />
+          </div>
+          <span className="ml-36 font-mono text-yellow-500">{errors?.password?.message}</span>
         </div>
         <div className="flex items-center justify-center space-x-2">
           <button className="mt-5 w-2/5 rounded-lg bg-yellow-500 text-gray-100 text-lg hover:bg-yellow-600">Login</button>

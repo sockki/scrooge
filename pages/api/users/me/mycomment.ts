@@ -30,7 +30,7 @@ async function handler(
           user: {
             select: {
               id:true,
-              character: true,
+              color: true,
               nickname: true,
             }
           },

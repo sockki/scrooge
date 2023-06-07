@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IForm {
+  myid: string;
+  password: string;
   nickname: string;
-  email: string;
 }
 
 const CreateAccount: NextPage = () => {
@@ -42,7 +43,7 @@ const CreateAccount: NextPage = () => {
 
   return (
     <div className="pt-5 ">
-      <div className="ml-2">
+      <div className="ml-2" onClick={() => router.back()}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="40px"
@@ -59,8 +60,8 @@ const CreateAccount: NextPage = () => {
         </svg>
       </div>
       <div className="flex flex-col text-xl font-semibold mt-6 ml-10">
-        <span>닉네임과 이메일로</span>
-        <span>간편하게 가입하세요!</span>
+        <span>아이디, 비밀번호, 닉네임을</span>
+        <span>각각 입력해주세요!</span>
       </div>
       <form
         className="mt-6 flex-col space-y-3"
@@ -68,36 +69,58 @@ const CreateAccount: NextPage = () => {
       >
         <div>
           <div className="flex space-x-2 items-center justify-center">
-            <label
-              className="text-lg text-gray-500"
-              htmlFor="nickname"
-            >
-              Name
+            <label className="text-lg text-gray-500  mr-14" htmlFor="myid">
+              ID
+            </label>
+            <input
+              className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
+              type="text"
+              {...register("myid", {
+                required: "사용할 ID를 적어주세요",
+                minLength: { value: 5, message: "5글자 이상으로 입력해주세요" },
+              })}
+            />
+          </div>
+          <span className="ml-36 text-sm text-yellow-500">
+            {errors.myid?.message}
+          </span>
+        </div>
+        <div>
+          <div className="flex space-x-2 items-center justify-center">
+            <label className="text-lg text-gray-500" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
+              type="text"
+              {...register("password", {
+                required: "사용할 비밀번호를 적어주세요",
+                minLength: { value: 5, message: "5글자 이상으로 입력해주세요" },
+              })}
+            />
+          </div>
+          <span className="ml-36 text-sm text-yellow-500">
+            {errors.password?.message}
+          </span>
+        </div>
+        <div>
+          <div className="flex space-x-2 items-center justify-center">
+            <label className="text-lg text-gray-500" htmlFor="nickname">
+              Nickname
             </label>
             <input
               className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
               type="text"
               {...register("nickname", {
                 required: "사용할 닉네임을 적어주세요",
-                maxLength: { value: 10, message: "10글자 이하로 입력해주세요" },
                 minLength: { value: 2, message: "2글자 이상으로 입력해주세요" },
+                maxLength: { value: 10, message: "10글자 이하로 입력해주세요"}
               })}
             />
           </div>
-          <span className="ml-36 text-sm text-yellow-500">{errors.nickname?.message}</span>
-        </div>
-        <div>
-          <div className="flex space-x-2 items-center justify-center">
-            <label className="text-lg text-gray-500" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
-              type="email"
-              {...register("email", {required: "사용할 이메일을 적어주세요"})}
-            />
-          </div>
-          <span className="ml-36 text-sm text-yellow-500">{errors.email?.message}</span>
+          <span className="ml-36 text-sm text-yellow-500">
+            {errors.nickname?.message}
+          </span>
         </div>
         <div className="flex items-center justify-center">
           <button className="mt-5 w-2/5 rounded-lg bg-yellow-500 text-gray-100 text-lg hover:bg-yellow-600">

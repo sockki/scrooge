@@ -18,7 +18,7 @@ async function handler(
                     select: {
                         id:true,
                         nickname: true,
-                        character: true,
+                        color: true,
                     },
                 },
                 _count: {

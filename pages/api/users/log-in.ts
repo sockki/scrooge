@@ -8,20 +8,31 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "POST") {
-    const { email } = req.body;
-    const user = await client.user.findUnique({
+    const { myid,password } = req.body;
+    const iduser = await client.user.findUnique({
       where: {
-        email
+        myid,
       }
     });
-    if (!user) {
+    const passuser = await client.user.findUnique({
+      where: {
+        password,
+      }
+    });
+    if (!iduser) {
       return res.status(404).end();
     }
-    req.session.user = {
-      id: user.id
-    };
-    await req.session.save();
-    return res.status(200).end();
+    if (!passuser) {
+      return res.status(402).end();
+    }
+    if(iduser.id === passuser.id) {
+      req.session.user = {
+        id: iduser.id
+      };
+      await req.session.save();
+      return res.status(200).end();
+    }
+    
   }
   return res.status(405).end();
 }

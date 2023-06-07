@@ -6,19 +6,26 @@ export default async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "POST") {
-    const { nickname, email } = req.body;
-    const user = await client.user.findUnique({
+    const { myid,password,nickname } = req.body;
+    console.log(myid,password,nickname);
+    const iduser = await client.user.findUnique({
       where: {
-        email
+        myid
       }
     });
-    if (user) {
+    const passuser = await client.user.findUnique({
+      where: {
+        password
+      }
+    });
+    if (iduser && passuser && iduser?.id === passuser?.id) {
       return res.status(200).end();
     }
     await client.user.create({
       data: {
-        nickname,
-        email,
+        myid,
+        password,
+        nickname
       }
     });
     return res.status(201).end();

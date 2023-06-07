@@ -13,9 +13,10 @@ datasource db {
 
 model User {
   id        Int        @id @default(autoincrement())
-  email     String     @unique
+  myid      String     @unique
+  password  String     @unique
   nickname  String
-  character Int?       @default(1)
+  color     String?    @default("xx")
   saved     Int?       @default(0)
   spended   Int?       @default(0)
   createdAt DateTime   @default(now())
@@ -93,7 +94,7 @@ model Like {
   userId    Int
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
-  
+
   @@index([userId])
   @@index([postId])
 }

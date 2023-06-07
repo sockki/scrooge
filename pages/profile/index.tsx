@@ -5,19 +5,20 @@ import { useRouter } from "next/router";
 import useMutation from "@/libs/useMutation";
 
 interface logoutres {
-  ok:boolean;
+  ok: boolean;
 }
 
 const Profile: NextPage = () => {
   const router = useRouter();
   const { user } = useUser();
-  const [logout, { data, loading }] = useMutation<logoutres>("/api/users/log-out");
+  const [logout, { data, loading }] =
+    useMutation<logoutres>("/api/users/log-out");
   const onlogout = () => {
-    if(loading) return
+    if (loading) return;
     logout({});
-    console.log(data?.ok)
-    if(data && data?.ok) {
-      router.replace("/log-in")
+    console.log(data?.ok);
+    if (data && data?.ok) {
+      router.replace("/log-in");
     }
   };
   return (
@@ -31,7 +32,7 @@ const Profile: NextPage = () => {
       <div className="flex flex-col pt-10">
         <div className="ml-5">
           <div className="flex justify-between items-center">
-            <div className="w-16 h-16 rounded-full bg-slate-500 ml-1" />
+            <div className="w-14 h-14 rounded-full bg-slate-50"/>
             <div className="flex space-x-5 mr-5">
               <div className="items-center border-[1.5px] border-[#161616] hover:border-slate-100 rounded-md p-1">
                 <button onClick={() => router.push("/profile/edit")}>
