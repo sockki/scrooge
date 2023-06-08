@@ -1,8 +1,35 @@
+import useUser from "@/libs/useUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+interface EditProfileForm {
+  nickname?: string;
+  myid?: string;
+  password?: string;
+}
 
 const Edit: NextPage = () => {
+  const {user} = useUser();
   const router = useRouter();
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    setError,
+    formState: { errors },
+    watch,
+  } = useForm();
+  
+  useEffect(()=>{
+    setValue("nickname", user?.nickname);
+    setValue("myid", user?.myid);
+    setValue("password", user?.password);
+  },[user, setValue])
+  const onValid = (data: EditProfileForm) => {
+    console.log(data);
+  };
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -12,30 +39,36 @@ const Edit: NextPage = () => {
         <div className="text-xl mt-2">내 정보 수정</div>
       </div>
       <div className="flex flex-col pt-10">
-        <form className="flex flex-col space-y-10">
+        <form
+          className="flex flex-col space-y-10"
+          onSubmit={handleSubmit(onValid)}
+        >
           <div className="flex justify-center">
             <span className="text-xl">닉네임: </span>
             <input
-              className="w-3/5 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+              {...register("nickname")}
+              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
               type="text"
             />
           </div>
           <div className="flex justify-center ">
             <span className="text-xl">ID:</span>
             <input
-              className="w-3/5 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+              {...register("myid")}
+              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
               type="text"
             />
           </div>
           <div className="flex justify-center">
             <span className="text-xl">비밀번호: </span>
             <input
-              className="w-3/5 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+              {...register("password")}
+              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
               type="text"
             />
           </div>
           <div className="flex justify-center">
-            <span className="text-xl mr-2">아바타:</span>
+            <span className="text-xl mr-2">아바타컬러:</span>
             <div className="flex space-x-1">
               <div className="w-7 h-7 rounded-full bg-[#e74c3c] " />
               <div className="w-7 h-7 rounded-full bg-[#f39c12] " />
