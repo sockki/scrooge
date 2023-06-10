@@ -30,6 +30,9 @@ async function handler(
       dbUser,
     });
   }
+  if (req.method === "POST") {
+    const {session: {user}, body: {nickname, myid, password, color}} = req;
+  }
 }
 
 export default withApiSession(handler);

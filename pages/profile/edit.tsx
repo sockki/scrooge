@@ -1,7 +1,9 @@
+import useMutation from "@/libs/useMutation";
 import useUser from "@/libs/useUser";
+import { cls } from "@/libs/utils";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditProfileForm {
@@ -11,7 +13,8 @@ interface EditProfileForm {
 }
 
 const Edit: NextPage = () => {
-  const {user} = useUser();
+  const { user } = useUser();
+  const [color, setColor] = useState("");
   const router = useRouter();
   const {
     register,
@@ -21,14 +24,16 @@ const Edit: NextPage = () => {
     formState: { errors },
     watch,
   } = useForm();
-  
-  useEffect(()=>{
+  const [editprofile, { data, loading }] = useMutation(`/api/users/me`);
+  useEffect(() => {
     setValue("nickname", user?.nickname);
     setValue("myid", user?.myid);
     setValue("password", user?.password);
-  },[user, setValue])
+    setColor(String(user?.color));
+  }, [user, setValue]);
   const onValid = (data: EditProfileForm) => {
-    console.log(data);
+    if (loading) return;
+    editprofile({...data, color});
   };
   return (
     <div className="pt-1 ">
@@ -43,47 +48,123 @@ const Edit: NextPage = () => {
           className="flex flex-col space-y-10"
           onSubmit={handleSubmit(onValid)}
         >
-          <div className="flex justify-center">
-            <span className="text-xl">닉네임: </span>
-            <input
-              {...register("nickname")}
-              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
-              type="text"
-            />
+          <div>
+            <div className="flex justify-center">
+              <span className="text-xl">닉네임: </span>
+              <input
+                {...register("nickname", {
+                  required: "사용할 닉네임을 적어주세요",
+                  minLength: {
+                    value: 2,
+                    message: "2글자 이상으로 입력해주세요",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "10글자 이하로 입력해주세요",
+                  },
+                })}
+                className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+                type="text"
+              />
+            </div>
           </div>
-          <div className="flex justify-center ">
-            <span className="text-xl">ID:</span>
-            <input
-              {...register("myid")}
-              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
-              type="text"
-            />
+          <div>
+            <div className="flex justify-center ">
+              <span className="text-xl">ID:</span>
+              <input
+                {...register("myid", {
+                  required: "사용할 ID를 적어주세요",
+                  minLength: {
+                    value: 5,
+                    message: "5글자 이상으로 입력해주세요",
+                  },
+                })}
+                className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+                type="text"
+              />
+            </div>
           </div>
-          <div className="flex justify-center">
-            <span className="text-xl">비밀번호: </span>
-            <input
-              {...register("password")}
-              className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
-              type="text"
-            />
+          <div>
+            <div className="flex justify-center">
+              <span className="text-xl">비밀번호: </span>
+              <input
+                {...register("password", {
+                  required: "사용할 비밀번호를 적어주세요",
+                  minLength: {
+                    value: 5,
+                    message: "5글자 이상으로 입력해주세요",
+                  },
+                })}
+                className="w-3/5 pl-2 text-xl text-gray-400 bg-transparent border-b-2 border-gray-200 focus:border-yellow-400 focus:outline-none"
+                type="text"
+              />
+            </div>
           </div>
           <div className="flex justify-center">
             <span className="text-xl mr-2">아바타컬러:</span>
-            <div className="flex space-x-1">
-              <div className="w-7 h-7 rounded-full bg-[#e74c3c] " />
-              <div className="w-7 h-7 rounded-full bg-[#f39c12] " />
-              <div className="w-7 h-7 rounded-full bg-[#f1c40f] " />
-              <div className="w-7 h-7 rounded-full bg-[#2ecc71] " />
-              <div className="w-7 h-7 rounded-full bg-[#3498db] " />
-              <div className="w-7 h-7 rounded-full bg-[#2c3e50] " />
-              <div className="w-7 h-7 rounded-full bg-[#9b59b6] " />
-              <div className="w-7 h-7 rounded-full bg-[#95a5a6] " />
+            <div className="flex space-x-2 select-none">
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#e74c3c]",
+                  color === "#e74c3c" ? "ring-4 ring-[#e74c3c]" : ""
+                )}
+                onClick={() => setColor("#e74c3c")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#f39c12]",
+                  color === "#f39c12" ? "ring-2 ring-[#f39c12]" : ""
+                )}
+                onClick={() => setColor("#f39c12")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#f1c40f]",
+                  color === "#f1c40f" ? "ring-2 ring-[#f1c40f]" : ""
+                )}
+                onClick={() => setColor("#f1c40f")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#2ecc71]",
+                  color === "#2ecc71" ? "ring-2 ring-[#2ecc71]" : ""
+                )}
+                onClick={() => setColor("#2ecc71")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#3498db]",
+                  color === "#3498db" ? "ring-2 ring-[#3498db]" : ""
+                )}
+                onClick={() => setColor("#3498db")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#2c3e50]",
+                  color === "#2c3e50" ? "ring-2 ring-[#2c3e50]" : ""
+                )}
+                onClick={() => setColor("#2c3e50")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#9b59b6]",
+                  color === "#9b59b6" ? "ring-2 ring-[#9b59b6]" : ""
+                )}
+                onClick={() => setColor("#9b59b6")}
+              />
+              <div
+                className={cls(
+                  "w-7 h-7 rounded-full bg-[#95a5a6]",
+                  color === "#95a5a6" ? "ring-2 ring-[#95a5a6]" : ""
+                )}
+                onClick={() => setColor("#95a5a6")}
+              />
             </div>
           </div>
           <div className="mx-auto">
-            <div className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
+            <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
               수정하기!
-            </div>
+            </button>
           </div>
         </form>
       </div>
