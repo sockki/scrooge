@@ -15,7 +15,7 @@ model User {
   id        Int        @id @default(autoincrement())
   myid      String     @unique
   password  String     @unique
-  nickname  String
+  nickname  String     @unique
   color     String?    @default("xx")
   saved     Int?       @default(0)
   spended   Int?       @default(0)

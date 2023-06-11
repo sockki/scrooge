@@ -10,6 +10,12 @@ interface EditProfileForm {
   nickname?: string;
   myid?: string;
   password?: string;
+  formerror?: string;
+}
+
+interface Editres {
+  ok: boolean;
+  error?: string;
 }
 
 const Edit: NextPage = () => {
@@ -22,9 +28,9 @@ const Edit: NextPage = () => {
     handleSubmit,
     setError,
     formState: { errors },
-    watch,
   } = useForm();
-  const [editprofile, { data, loading }] = useMutation(`/api/users/me`);
+  const [editprofile, { data, loading }] =
+    useMutation<Editres>(`/api/users/me`);
   useEffect(() => {
     setValue("nickname", user?.nickname);
     setValue("myid", user?.myid);
@@ -33,8 +39,14 @@ const Edit: NextPage = () => {
   }, [user, setValue]);
   const onValid = (data: EditProfileForm) => {
     if (loading) return;
-    editprofile({...data, color});
+    editprofile({ ...data, color });
   };
+  useEffect(() => {
+    if (data && !data.ok) {
+      setError("formerror", { message: data.error });
+    }
+    console.log(errors.formerror?.message);
+  }, [data, setError]);
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
@@ -161,6 +173,11 @@ const Edit: NextPage = () => {
               />
             </div>
           </div>
+          {errors.formerror ? (
+            <div className="my-2 text-yellow-500 font-bold block">
+              {errors?.formerror?.message}
+            </div>
+          ) : null}
           <div className="mx-auto">
             <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
               수정하기!
