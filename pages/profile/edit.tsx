@@ -16,6 +16,7 @@ interface EditProfileForm {
 interface Editres {
   ok: boolean;
   error?: string;
+  answer?: string;
 }
 
 const Edit: NextPage = () => {
@@ -28,7 +29,7 @@ const Edit: NextPage = () => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<EditProfileForm>();
   const [editprofile, { data, loading }] =
     useMutation<Editres>(`/api/users/me`);
   useEffect(() => {
@@ -38,6 +39,7 @@ const Edit: NextPage = () => {
     setColor(String(user?.color));
   }, [user, setValue]);
   const onValid = (data: EditProfileForm) => {
+    console.log(data);
     if (loading) return;
     editprofile({ ...data, color });
   };
@@ -45,13 +47,25 @@ const Edit: NextPage = () => {
     if (data && !data.ok) {
       setError("formerror", { message: data.error });
     }
-    console.log(errors.formerror?.message);
   }, [data, setError]);
   return (
     <div className="pt-1 ">
       <div className="relative flex justify-center items-center ">
         <button className="absolute left-2" onClick={() => router.back()}>
-          뒤로
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30px"
+          height="30px"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M15.7071 4.29289C16.0976 4.68342 16.0976 5.31658 15.7071 5.70711L9.41421 12L15.7071 18.2929C16.0976 18.6834 16.0976 19.3166 15.7071 19.7071C15.3166 20.0976 14.6834 20.0976 14.2929 19.7071L7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929L14.2929 4.29289C14.6834 3.90237 15.3166 3.90237 15.7071 4.29289Z"
+            fill="#ffffff"
+          />
+        </svg>
         </button>
         <div className="text-xl mt-2">내 정보 수정</div>
       </div>
@@ -79,6 +93,11 @@ const Edit: NextPage = () => {
                 type="text"
               />
             </div>
+            {errors.nickname ? (
+              <div className=" text-yellow-500 font-bold text-sm flex items-center justify-center">
+                {errors?.nickname?.message}
+              </div>
+            ) : null}
           </div>
           <div>
             <div className="flex justify-center ">
@@ -95,6 +114,11 @@ const Edit: NextPage = () => {
                 type="text"
               />
             </div>
+            {errors.myid ? (
+              <div className="text-yellow-500 font-bold text-sm flex items-center justify-center">
+                {errors?.myid?.message}
+              </div>
+            ) : null}
           </div>
           <div>
             <div className="flex justify-center">
@@ -111,71 +135,81 @@ const Edit: NextPage = () => {
                 type="text"
               />
             </div>
+            {errors.password ? (
+              <div className="text-yellow-500 font-bold text-sm flex items-center justify-center">
+                {errors?.password?.message}
+              </div>
+            ) : null}
           </div>
           <div className="flex justify-center">
             <span className="text-xl mr-2">아바타컬러:</span>
             <div className="flex space-x-2 select-none">
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#e74c3c]",
+                  "w-6 h-6 rounded-full bg-[#e74c3c]",
                   color === "#e74c3c" ? "ring-4 ring-[#e74c3c]" : ""
                 )}
                 onClick={() => setColor("#e74c3c")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#f39c12]",
-                  color === "#f39c12" ? "ring-2 ring-[#f39c12]" : ""
+                  "w-6 h-6 rounded-full bg-[#f39c12]",
+                  color === "#f39c12" ? "ring-4 ring-[#f39c12]" : ""
                 )}
                 onClick={() => setColor("#f39c12")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#f1c40f]",
-                  color === "#f1c40f" ? "ring-2 ring-[#f1c40f]" : ""
+                  "w-6 h-6 rounded-full bg-[#f1c40f]",
+                  color === "#f1c40f" ? "ring-4 ring-[#f1c40f]" : ""
                 )}
                 onClick={() => setColor("#f1c40f")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#2ecc71]",
-                  color === "#2ecc71" ? "ring-2 ring-[#2ecc71]" : ""
+                  "w-6 h-6 rounded-full bg-[#2ecc71]",
+                  color === "#2ecc71" ? "ring-4 ring-[#2ecc71]" : ""
                 )}
                 onClick={() => setColor("#2ecc71")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#3498db]",
-                  color === "#3498db" ? "ring-2 ring-[#3498db]" : ""
+                  "w-6 h-6 rounded-full bg-[#3498db]",
+                  color === "#3498db" ? "ring-4 ring-[#3498db]" : ""
                 )}
                 onClick={() => setColor("#3498db")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#2c3e50]",
-                  color === "#2c3e50" ? "ring-2 ring-[#2c3e50]" : ""
+                  "w-6 h-6 rounded-full bg-[#2c3e50]",
+                  color === "#2c3e50" ? "ring-4 ring-[#2c3e50]" : ""
                 )}
                 onClick={() => setColor("#2c3e50")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#9b59b6]",
-                  color === "#9b59b6" ? "ring-2 ring-[#9b59b6]" : ""
+                  "w-6 h-6 rounded-full bg-[#9b59b6]",
+                  color === "#9b59b6" ? "ring-4 ring-[#9b59b6]" : ""
                 )}
                 onClick={() => setColor("#9b59b6")}
               />
               <div
                 className={cls(
-                  "w-7 h-7 rounded-full bg-[#95a5a6]",
-                  color === "#95a5a6" ? "ring-2 ring-[#95a5a6]" : ""
+                  "w-6 h-6 rounded-full bg-[#95a5a6]",
+                  color === "#95a5a6" ? "ring-4 ring-[#95a5a6]" : ""
                 )}
                 onClick={() => setColor("#95a5a6")}
               />
             </div>
           </div>
           {errors.formerror ? (
-            <div className="my-2 text-yellow-500 font-bold block">
+            <div className="text-yellow-500 font-bold text-sm flex items-center justify-center">
               {errors?.formerror?.message}
+            </div>
+          ) : null}
+          {data?.answer ? (
+            <div className="text-yellow-500 font-bold text-sm flex items-center justify-center">
+              {data?.answer}
             </div>
           ) : null}
           <div className="mx-auto">

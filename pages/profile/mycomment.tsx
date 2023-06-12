@@ -29,7 +29,20 @@ const myComment: NextPage = () => {
     <div className="pt-1">
       <div className="relative flex justify-center items-center ">
         <button className="absolute left-2" onClick={() => router.back()}>
-          뒤로
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30px"
+          height="30px"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M15.7071 4.29289C16.0976 4.68342 16.0976 5.31658 15.7071 5.70711L9.41421 12L15.7071 18.2929C16.0976 18.6834 16.0976 19.3166 15.7071 19.7071C15.3166 20.0976 14.6834 20.0976 14.2929 19.7071L7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929L14.2929 4.29289C14.6834 3.90237 15.3166 3.90237 15.7071 4.29289Z"
+            fill="#ffffff"
+          />
+        </svg>
         </button>
         <div className="text-xl mt-2">내 정보</div>
       </div>
@@ -44,7 +57,7 @@ const myComment: NextPage = () => {
                   <div className="">
                     <div className="flex flex-col ">
                       <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 rounded-full bg-slate-500" />
+                        <div className={`w-5 h-5 rounded-full bg-[${mycomment?.post?.user?.color}]`} />
                         <div className="text-slate-100 font-bold">
                           {mycomment?.post?.user?.nickname}
                         </div>
@@ -110,7 +123,7 @@ const myComment: NextPage = () => {
                   <div className="py-3">
                     <div className="flex flex-col ">
                       <div className="flex  items-center space-x-1">
-                        <div className="w-5 h-5 rounded-full bg-slate-500" />
+                        <div className={`w-5 h-5 rounded-full bg-[${mycomment?.post?.user?.color}]`} />
                         <div className="text-slate-100 font-bold">
                           {mycomment?.post?.user?.nickname}
                         </div>

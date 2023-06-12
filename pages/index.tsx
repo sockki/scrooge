@@ -34,7 +34,7 @@ const Home: NextPage = () => {
                   <div className="">
                     <div className="flex flex-col ">
                       <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 rounded-full bg-slate-500" />
+                        <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
                         <div className="text-slate-100 font-bold">
                           {post?.user?.nickname}
                         </div>
@@ -103,7 +103,7 @@ const Home: NextPage = () => {
                   <div className="py-3">
                     <div className="flex flex-col ">
                       <div className="flex  items-center space-x-1">
-                        <div className="w-5 h-5 rounded-full bg-slate-500" />
+                        <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
                         <div className="text-slate-100 font-bold">
                           {post?.user?.nickname}
                         </div>

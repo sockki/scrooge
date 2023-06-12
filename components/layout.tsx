@@ -85,7 +85,7 @@ export default function Layout({ seotitle, children }: LayoutProps) {
             href={`/profile`}
             className="flex justify-center items-center px-1 py-1 border-[1.5px] rounded-xl hover:bg-gray-600"
           >
-            <div className="w-5 h-5 bg-slate-300 rounded-full" />
+            <div className={`w-5 h-5 rounded-full bg-[${user?.color}]`} />
             <div className="ml-1 text-xs font-sans">{user?.nickname}</div>
           </Link>
         </div>

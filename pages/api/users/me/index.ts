@@ -51,7 +51,7 @@ async function handler(
       if(alreadyExistid) {
         return res.json({
           ok:false,
-          error: "ID가 이미 존재합니다."
+          error: "ID가 이미 존재합니다. 새로고침 후 다시 이용해주세요"
         })
       }
     }
@@ -69,7 +69,7 @@ async function handler(
       if(alreadyExistnickname) {
         return res.json({
           ok:false,
-          error: "닉네임이 이미 존재합니다."
+          error: "닉네임이 이미 존재합니다. 새로고침 후 다시 이용해주세요"
         })
       }
     }
@@ -87,7 +87,7 @@ async function handler(
       if(alreadyExistpassword) {
         return res.json({
           ok:false,
-          error: "패스워드가 이미 존재합니다."
+          error: "패스워드가 이미 존재합니다. 새로고침 후 다시 이용해주세요"
         })
       }
     }
@@ -103,7 +103,8 @@ async function handler(
       }
     })
     return res.json({
-      ok:true
+      ok:true,
+      answer: "수정이 완료되었습니다."
     })
   }
 }

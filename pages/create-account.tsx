@@ -28,10 +28,10 @@ const CreateAccount: NextPage = () => {
         body: JSON.stringify(data),
       });
       if (request.status === 200) {
-        alert("Account already exists! Please log in!");
+        alert("계정이 이미 존재 합니다. 로그인 해주세요!");
       }
       if (request.status === 201) {
-        alert("Account created! Please log in!");
+        alert("계정이 만들어졌습니다. 로그인 해주세요!");
       }
       if (request.status !== 405) {
         router.push("/log-in");
@@ -114,7 +114,7 @@ const CreateAccount: NextPage = () => {
               {...register("nickname", {
                 required: "사용할 닉네임을 적어주세요",
                 minLength: { value: 2, message: "2글자 이상으로 입력해주세요" },
-                maxLength: { value: 10, message: "10글자 이하로 입력해주세요"}
+                maxLength: { value: 10, message: "10글자 이하로 입력해주세요" },
               })}
             />
           </div>
