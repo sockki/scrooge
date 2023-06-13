@@ -1,8 +1,12 @@
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import useUser from "@/libs/useUser";
 import { useRouter } from "next/router";
 import useMutation from "@/libs/useMutation";
+import { SWRConfig } from "swr";
+import { User } from "@prisma/client";
+import { withSsrSession } from "@/libs/withSession";
+import client from "@/libs/client";
 
 interface logoutres {
   ok: boolean;
@@ -96,4 +100,33 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+const Page: NextPage<{ dbUser: User }> = ({ dbUser }: any) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/me": { ok: true, dbUser },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
+
+export const getServerSideProps = withSsrSession(async function ({
+  req,
+}: NextPageContext) {
+  const dbUser = await client.user.findUnique({
+    where: {
+      id: req?.session.user?.id
+    },
+  });
+  return {
+    props: {
+      dbUser: JSON.parse(JSON.stringify(dbUser)),
+    },
+  };
+});
+
+export default Page;

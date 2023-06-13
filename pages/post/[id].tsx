@@ -2,11 +2,12 @@ import Layout from "@/components/layout";
 import useMutation from "@/libs/useMutation";
 import { cls } from "@/libs/utils";
 import { Answer, Post, User } from "@prisma/client";
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import client from "@/libs/client";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -38,7 +39,7 @@ interface ansMutation {
   newans: Answer;
 }
 
-const VotePost: NextPage = () => {
+const VotePost: NextPage<IPostDetail> = ({post}) => {
   const router = useRouter();
   // post 데이터
   const { data, mutate } = useSWR<IPostDetail>(
@@ -164,21 +165,21 @@ const VotePost: NextPage = () => {
             <div className="">
               <div className="flex flex-col ">
                 <div className="flex items-center space-x-1">
-                  <div className={`w-5 h-5 rounded-full bg-[${data?.post?.user?.color}]`} />
+                  <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
                   <div className="text-slate-100 font-bold">
-                    {data?.post?.user?.nickname}
+                    {post?.user?.nickname}
                   </div>
                 </div>
               </div>
               <div className="mt-1 bg-white px-2 py-4 rounded-xl flex justify-center items-center flex-col">
                 <span className="text-gray-800 text-xl font-semibold">
-                  {`${data?.post?.money}원`}
+                  {`${post?.money}원`}
                 </span>
                 <span className="text-gray-800 text-lg">
-                  {data?.post?.what}
+                  {post?.what}
                 </span>
                 <span className="text-gray-800 text-sm">
-                  {data?.post?.description}
+                  {post?.description}
                 </span>
               </div>
               <div className="flex justify-between mt-2 ml-1">
@@ -230,8 +231,8 @@ const VotePost: NextPage = () => {
                   </div>
                 </div>
                 <div className="text-slate-10 text-[1px] mr-4 ">{`${String(
-                  data?.post?.createdAt
-                ).substring(0, 10)}  ${String(data?.post?.createdAt).substring(
+                  post?.createdAt
+                ).substring(0, 10)}  ${String(post?.createdAt).substring(
                   11,
                   16
                 )}`}</div>
@@ -244,21 +245,21 @@ const VotePost: NextPage = () => {
             <div className="py-3">
               <div className="flex flex-col ">
                 <div className="flex  items-center space-x-1">
-                  <div className={`w-5 h-5 rounded-full bg-[${data?.post?.user?.color}]`} />
+                  <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
                   <div className="text-slate-100 font-bold">
-                    {data?.post?.user?.nickname}
+                    {post?.user?.nickname}
                   </div>
                 </div>
               </div>
               <div className="mt-1 bg-white p-2 rounded-xl flex flex-col">
                 <span className="text-gray-800 text-xl font-semibold">
-                  {`-${data?.post?.money}원`}
+                  {`-${post?.money}원`}
                 </span>
                 <span className="text-gray-800 text-lg">
-                  {data?.post?.what}
+                  {post?.what}
                 </span>
                 <span className="text-gray-800 text-sm">
-                  {data?.post?.description}
+                  {post?.description}
                 </span>
               </div>
               <div className="flex justify-between space-x-3 mt-1 ml-1">
@@ -301,10 +302,10 @@ const VotePost: NextPage = () => {
                 </div>
                 <div>
                   <div className="text-slate-100 text-[1px] mr-4">
-                    {`${String(data?.post?.createdAt).substring(
+                    {`${String(post?.createdAt).substring(
                       0,
                       10
-                    )}  ${String(data?.post?.createdAt).substring(11, 16)}`}
+                    )}  ${String(post?.createdAt).substring(11, 16)}`}
                   </div>
                 </div>
               </div>
@@ -313,7 +314,7 @@ const VotePost: NextPage = () => {
           </div>
         )}
         <div className="flex flex-col space-y-3 w-4/5 mt-4 mb-52">
-          {data?.post?.Answer?.map((ans) => (
+          {post?.Answer?.map((ans) => (
             <div
               key={ans.id}
               className="w-full h-auto rounded-md flex flex-col"
@@ -321,7 +322,7 @@ const VotePost: NextPage = () => {
               <div className="">
                 <div className="flex flex-col ">
                   <div className="flex space-x-1">
-                    <div className={`w-5 h-5 rounded-full bg-[${data?.post?.user?.color}]`} />
+                    <div className={`w-5 h-5 rounded-full bg-[${ans?.user?.color}]`} />
                     <div className="text-slate-100 font-bold">
                       {ans?.user?.nickname}
                     </div>
@@ -336,10 +337,10 @@ const VotePost: NextPage = () => {
                   </div>
                   <div>
                     <div className="text-slate-100 text-[1px] mr-4">
-                      {`${String(data?.post?.createdAt).substring(
+                      {`${String(ans?.createdAt).substring(
                         0,
                         10
-                      )}  ${String(data?.post?.createdAt).substring(11, 16)}`}
+                      )}  ${String(ans?.createdAt).substring(11, 16)}`}
                     </div>
                   </div>
                 </div>
@@ -371,5 +372,59 @@ const VotePost: NextPage = () => {
     </Layout>
   );
 };
+
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  }
+}
+
+
+export const getStaticProps: GetStaticProps = async(ctx) => {
+  if (!ctx?.params?.id) {
+    return {
+      props: {},
+    };
+  }
+  const post = await client.post.findUnique({
+    where: {
+        id: Number(ctx?.params?.id),
+    },
+    include: {
+        user: {
+            select : {
+                id: true,
+                nickname: true,
+                color: true
+            }
+        },
+        Answer: {
+            select: {
+                id:true,
+                content: true,
+                createdAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        nickname: true,
+                        color:true,
+                    }
+                }
+                
+            }
+        }
+    }
+});
+  if (!post) {
+    return {
+      props: {}
+    };
+  }
+  return {
+    props: {post: JSON.parse(JSON.stringify(post)),},
+  };
+}
 
 export default VotePost;

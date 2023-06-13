@@ -1,8 +1,9 @@
 import Layout from "@/components/layout";
 import { NextPage } from "next";
 import Link from "next/link";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Post, User } from "@prisma/client";
+import client from "@/libs/client";
 
 interface PostWithUser extends Post {
   user: User;
@@ -24,7 +25,10 @@ const Home: NextPage = () => {
     <div>
       <Layout seotitle="title">
         <div className="flex flex-col space-y-6 justify-center items-center py-10">
-          {data?.posts?.slice(0)?.reverse().map((post) =>
+          {data?.posts
+            ?.slice(0)
+            ?.reverse()
+            .map((post) =>
               post.isVote ? (
                 <Link
                   key={post?.id}
@@ -34,12 +38,13 @@ const Home: NextPage = () => {
                   <div className="">
                     <div className="flex flex-col ">
                       <div className="flex items-center space-x-1">
-                        <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
+                        <div
+                          className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`}
+                        />
                         <div className="text-slate-100 font-bold">
                           {post?.user?.nickname}
                         </div>
                       </div>
-                     
                     </div>
                     <div className="mt-1 bg-white px-2 py-4 rounded-xl flex justify-center items-center flex-col">
                       <span className="text-gray-800 text-xl font-semibold">
@@ -103,7 +108,9 @@ const Home: NextPage = () => {
                   <div className="py-3">
                     <div className="flex flex-col ">
                       <div className="flex  items-center space-x-1">
-                        <div className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`} />
+                        <div
+                          className={`w-5 h-5 rounded-full bg-[${post?.user?.color}]`}
+                        />
                         <div className="text-slate-100 font-bold">
                           {post?.user?.nickname}
                         </div>
@@ -178,4 +185,34 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+const Page: NextPage<PostsRes> = ({ posts }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/posts": {
+            ok: true,
+            posts,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
+export async function getStaticProps() {
+  const posts = await client.post.findMany({
+    include: {
+      user: true,
+    },
+  });
+  return {
+    props: {
+      posts: JSON.parse(JSON.stringify(posts)),
+    },
+  };
+}
+
+export default Page;

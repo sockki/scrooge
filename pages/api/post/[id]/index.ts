@@ -34,6 +34,7 @@ async function handler(
                             select: {
                                 id: true,
                                 nickname: true,
+                                color:true,
                             }
                         }
                         

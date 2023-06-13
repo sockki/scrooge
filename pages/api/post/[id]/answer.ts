@@ -38,6 +38,7 @@ async function handler(
             content,
         }
     })
+    await res.revalidate(`/post/${id}`)
     res.json({
         ok:true,
         newans

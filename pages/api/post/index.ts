@@ -86,6 +86,7 @@ async function handler(
                     spended: Number(nowuser?.spended) + Number(price)
                 }
             })
+            await res.revalidate("/")
             res.json({
                 ok: true,
                 newpost
