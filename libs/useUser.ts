@@ -16,6 +16,7 @@ export default function useUser(pathname?: string) {
   );
   useEffect(() => {
     if (data && !data.ok) {
+      console.log("onuser")
       router.replace("/log-in");
     }
   }, [data, router]);

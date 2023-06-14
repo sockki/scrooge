@@ -20,7 +20,8 @@ const Profile: NextPage = () => {
   const onlogout = () => {
     if (loading) return;
     logout({});
-    console.log(data?.ok);
+    alert("로그아웃이 완료되었습니다. 좌상단의 < 버튼을 눌러주세요")
+
     if (data && data?.ok) {
       router.replace("/log-in");
     }
