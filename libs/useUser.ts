@@ -12,7 +12,7 @@ export default function useUser(pathname?: string) {
   const router = useRouter();
   const url = "/api/users/me";
   const { data, error } = useSWR<profileRes>(
-    pathname === "/log-in" ? null : url
+    (pathname === "/create-account") || (pathname === "/log-in") ? null : url
   );
   useEffect(() => {
     if (data && !data.ok) {

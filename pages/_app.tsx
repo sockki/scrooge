@@ -6,7 +6,7 @@ import { SWRConfig } from "swr";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  useUser(pathname);
+  useUser(pathname); 
   return (
     <SWRConfig
       value={{ fetcher: (url: string) => fetch(url).then((res) => res.json()) }}

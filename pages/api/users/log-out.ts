@@ -12,21 +12,12 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
  const {user} = req.session;
- const nowuser = await client.user.findUnique({
-    where: {
-        id: user?.id
-    }
- });
- if(!nowuser) {
-    return res.json({
-        ok:false
-    })
+ 
+ if (!user) {
+    return res.status(401).end()
  }
  await req.session.destroy();
- console.log("yes")
- return res.json({
-    ok:true
- })
+ return res.status(201).end()
 }
 
 export default withApiSession(handler);
