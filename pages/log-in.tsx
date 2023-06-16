@@ -8,7 +8,7 @@ interface IForm {
   password: string;
 }
 
-const Login: NextPage = () => {
+const Logins: NextPage = () => {
   const {
     register,
     handleSubmit,
@@ -129,4 +129,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default Logins;
