@@ -122,7 +122,7 @@ const Login: NextPage = () => {
       >
         <span className="text-sm">아직 개발중에 있습니다.</span>
         <span className="text-sm">
-          여기를 클릭해서 페이지를 1회 새로고침 후 이용해주세요.
+          최초 로그인 시 이곳를 클릭해서 페이지를 1회 새로고침 후 이용해주세요.
         </span>
       </div>
     </div>
