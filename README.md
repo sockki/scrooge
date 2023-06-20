@@ -21,7 +21,7 @@
 아직 디자인 래퍼런스를 찾지 못해서 일단은 구현 뒤에 디자인을 이쁘게 바꾸는 것이 좋을 것으로 생각됨...
 
 <img src='/개발일지사진/초기디자인래퍼런스.png' width="400px" height="400px" title="초기디자인래퍼런스"></img>
-<img src='/개발일지사진/초기디자인래퍼런스1.png' width="400px" height="400px" title="초기디자인래퍼런스"></img>
+<img src='/개발일지사진/초기디자인래퍼런스1.png' width="400px" height="400px" title="초기디자인래퍼런스"></img><br/>
 이와 같은 래퍼런스로 하였다.
 
 
@@ -37,7 +37,7 @@ sgv 파일들이 마음에 드는 것들이 가공하기가 쉽지 않음을 확
 따라서 avatarcolor 라는 이름으로 그냥 아바타로 색깔을 사용하려고 한다.
 초기에 회원가입을 할 때 default 값으로 #ffffff로 정해놓고, 자신의 정보 수정 페이지에서 구체적으로 색깔을 정하도록 하였음
 
-<img src='/개발일지사진/아바타컬러1.png' width="400px" height="400px" title="초기디자인래퍼런스"></img>
+<img src='/개발일지사진/아바타컬러1.png' width="400px" height="400px" title="초기디자인래퍼런스"></img><br/>
 <img src='/개발일지사진/아바타컬러2.png' width="400px" height="90px" title="초기디자인래퍼런스"></img>
 
 
