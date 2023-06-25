@@ -16,7 +16,7 @@ model User {
   myid      String     @unique
   password  String     @unique
   nickname  String     @unique
-  color     String?    @default("#ffffff")
+  color     String?    @default("#f1c40f")
   saved     Int?       @default(0)
   spended   Int?       @default(0)
   createdAt DateTime   @default(now())
