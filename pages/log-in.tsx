@@ -15,7 +15,6 @@ const Login: NextPage = () => {
     setError,
     formState: { errors },
   } = useForm<IForm>();
-  const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const onValid = async (data: IForm) => {
@@ -51,7 +50,6 @@ const Login: NextPage = () => {
     router.push("/create-account");
   };
   const onReload = () => {
-    setReload(true);
     router.reload();
   };
 
