@@ -91,7 +91,7 @@ const Login: NextPage = () => {
             </label>
             <input
               className="border-b-2 border-gray-500 w-2/3 p-1 pl-2 bg-transparent focus:outline-none focus:border-yellow-500"
-              type="text"
+              type="password"
               {...register("password", {
                 required: "Write your email please.",
               })}
