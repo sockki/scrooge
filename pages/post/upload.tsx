@@ -26,8 +26,9 @@ const VoteUpload: NextPage = () => {
   } = useForm<Iupload>();
   const [uploadpost, { data, loading }] = useMutation<Uploadgea>("/api/post");
   const onValid = (form: Iupload) => {
-    if (loading) return;
-    uploadpost({ ...form, isvote });
+    if (!loading) {
+      uploadpost({ ...form, isvote });
+    }
   };
 
   useEffect(() => {
@@ -97,9 +98,15 @@ const VoteUpload: NextPage = () => {
               />
             </div>
             <div className="mx-auto">
-              <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
-                투표받기!
-              </button>
+              {loading ? (
+                <div className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
+                  게시중...
+                </div>
+              ) : (
+                <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
+                  투표받기!
+                </button>
+              )}
             </div>
           </form>
         ) : (
@@ -136,9 +143,15 @@ const VoteUpload: NextPage = () => {
             </div>
 
             <div className="mx-auto">
-              <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
-                글올리기!
-              </button>
+              {loading ? (
+                <div className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
+                  게시중...
+                </div>
+              ) : (
+                <button className=" bg-yellow-400 border-[1.5px] w-28 flex items-center justify-center rounded-md border-none p-1 shadow-md hover:shadow-xl hover:bg-yellow-500">
+                  글올리기!
+                </button>
+              )}
             </div>
           </form>
         )}
