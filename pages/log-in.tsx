@@ -50,9 +50,6 @@ const Login: NextPage = () => {
   const onCreateAccount = () => {
     router.push("/create-account");
   };
-  const onReload = () => {
-    router.reload();
-  };
 
   useEffect(() => {
     if(needreload) {
@@ -121,11 +118,7 @@ const Login: NextPage = () => {
         </div>
       </form>
 
-      <div
-        className="flex flex-col justify-center items-center w-3/4  mx-auto mt-12 py-1 rounded-lg hover:border-[1.5px]"
-        onClick={onReload}
-      >
-      </div>
+     
     </div>
   );
 };
