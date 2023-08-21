@@ -11,13 +11,22 @@ interface profileRes {
 export default function useUser(pathname?: string) {
   const router = useRouter();
   const url = "/api/users/me";
-  const { data, error } = useSWR<profileRes>(
+  const { data, error, mutate } = useSWR<profileRes>(
     (pathname === "/create-account") || (pathname === "/log-in") ? null : url
   );
   useEffect(() => {
     if (data && !data.ok) {
       console.log("onuser")
-      router.replace("/log-in");
+      mutate()
+      router.replace(
+        {
+          pathname:"/log-in",
+          query: {
+            needreload:true,
+          }
+        },
+        "/log-in"
+      );
     }
   }, [data, router]);
   //return router.replace("/enter");

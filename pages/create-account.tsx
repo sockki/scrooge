@@ -35,7 +35,15 @@ const CreateAccount: NextPage = () => {
         alert("계정이 만들어졌습니다. 로그인 해주세요!");
       }
       if (request.status !== 405) {
-        router.push("/log-in");
+        router.replace(
+          {
+            pathname:"/log-in",
+            query: {
+              needreload:true,
+            }
+          },
+          "/log-in"
+        );
       }
 
       setLoading(false);

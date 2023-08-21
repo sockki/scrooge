@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <SWRConfig
       value={{ fetcher: (url: string) => fetch(url).then((res) => res.json()) }}
     >
-        <div className="w-full max-w-lg mx-auto h-full min-h-screen bg-[#161616] shadow-lg">
+        <div className="w-full  max-w-lg mx-auto h-full min-h-screen bg-[#161616] shadow-lg">
           <Component {...pageProps} />
         </div>
 

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IForm {
@@ -17,6 +17,7 @@ const Login: NextPage = () => {
   } = useForm<IForm>();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const {needreload} = router.query;
   const onValid = async (data: IForm) => {
     if (!loading) {
       const request = await fetch("/api/users/log-in", {
@@ -52,6 +53,12 @@ const Login: NextPage = () => {
   const onReload = () => {
     router.reload();
   };
+
+  useEffect(() => {
+    if(needreload) {
+      router.reload();
+    }
+  },[router,needreload])
 
   return (
     <div className="pt-5">
@@ -118,10 +125,6 @@ const Login: NextPage = () => {
         className="flex flex-col justify-center items-center w-3/4  mx-auto mt-12 py-1 rounded-lg hover:border-[1.5px]"
         onClick={onReload}
       >
-        <span className="text-sm">아직 개발중에 있습니다.</span>
-        <span className="text-sm">
-          최초 로그인 시 이곳를 클릭해서 페이지를 1회 새로고침 후 이용해주세요.
-        </span>
       </div>
     </div>
   );

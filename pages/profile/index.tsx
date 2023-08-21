@@ -29,7 +29,7 @@ const Profile: NextPage = () => {
     }
     if (request.status == 201) {
       alert("로그아웃이 완료되었습니다.");
-      router.replace("/log-in");
+      router.reload();
     }
   };
   return (
