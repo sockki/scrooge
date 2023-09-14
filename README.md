@@ -9,7 +9,7 @@
 
 ## 기능소개
 
-<img src='/개발일지사진/메인화면1.png' width="820px" height="250px" title="메인화면1"></img><br/>
+<img src='/anyfile/개발일지사진/메인화면1.png' width="820px" height="250px" title="메인화면1"></img><br/>
 
 ### 1. 회원가입 및 로그인
 
