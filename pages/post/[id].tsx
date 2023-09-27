@@ -42,7 +42,7 @@ interface ansMutation {
 const VotePost: NextPage<IPostDetail> = ({post}) => {
   const router = useRouter();
   // post 데이터
-  const { data, mutate } = useSWR<IPostDetail>(
+  const { data, mutate, isLoading } = useSWR<IPostDetail>(
     router.query.id ? `/api/post/${router.query.id}` : null
   );
 
@@ -160,7 +160,7 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
   return (
     <Layout seotitle="post">
       <div className="flex flex-col justify-center items-center py-10">
-        {data?.post.isVote ? (
+        {post.isVote ? (
           <div className="w-4/5 h-auto rounded-md pt-1 flex flex-col">
             <div className="">
               <div className="flex flex-col ">
@@ -188,7 +188,7 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                     <button
                       className={cls(
                         "px-1 text-sm font-bold rounded-lg border-[1.5px] border-pink-600",
-                        data.isgoed
+                        data?.isgoed
                           ? "bg-pink-600 text-[#161616]"
                           : "text-pink-600"
                       )}
@@ -196,13 +196,13 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                     >
                       Buy!
                     </button>
-                    <span className="text-pink-600 text-sm ml-1">{`${data?.gonum}`}</span>
+                    <span className="text-pink-600 text-sm ml-1">{isLoading ? '0' :`${data?.gonum}`}</span>
                   </div>
                   <div className="flex">
                     <button
                       className={cls(
                         "px-1 text-sm font-bold rounded-lg border-[1.5px] border-teal-600",
-                        data.isstoped
+                        data?.isstoped
                           ? "bg-teal-600 text-[#161616]"
                           : "text-teal-600"
                       )}
@@ -210,7 +210,7 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                     >
                       Save!
                     </button>
-                    <span className="text-teal-600 text-sm ml-1">{`${data?.stopnum}`}</span>
+                    <span className="text-teal-600 text-sm ml-1">{isLoading ? '0' :`${data?.stopnum}`}</span>
                   </div>
                   <div className="flex space-x-1">
                     <span className="mt-1 ml-1">
@@ -227,7 +227,7 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                         />
                       </svg>
                     </span>
-                    <span className="text-slate-10 text-sm">{`${data?.answernum}`}</span>
+                    <span className="text-slate-10 text-sm">{isLoading ? '0' :`${data?.answernum}`}</span>
                   </div>
                 </div>
                 <div className="text-slate-10 text-[1px] mr-4 ">{`${String(
@@ -238,7 +238,6 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                 )}`}</div>
               </div>
             </div>
-            <div></div>
           </div>
         ) : (
           <div className="w-4/5 h-auto rounded-md flex flex-col">
@@ -263,7 +262,8 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                 </span>
               </div>
               <div className="flex justify-between space-x-3 mt-1 ml-1">
-                <div className="flex space-x-2">
+                
+                  <div className="flex space-x-2">
                   <div className="flex" onClick={onlikeClick}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -280,7 +280,7 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span className="text-[#f4f814] text-sm ml-1">{`${data?.likenum}`}</span>
+                    <span className="text-[#f4f814] text-sm ml-1">{isLoading ? '0' :`${data?.likenum}`}</span>
                   </div>
                   <div className="flex">
                     <span className="mt-1 ml-1">
@@ -297,9 +297,10 @@ const VotePost: NextPage<IPostDetail> = ({post}) => {
                         />
                       </svg>
                     </span>
-                    <span className="text-slate-100  text-sm ml-1">{`${data?.answernum}`}</span>
+                    <span className="text-slate-100  text-sm ml-1">{isLoading ? '0' :`${data?.answernum}`}</span>
                   </div>
                 </div>
+                
                 <div>
                   <div className="text-slate-100 text-[1px] mr-4">
                     {`${String(post?.createdAt).substring(
