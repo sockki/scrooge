@@ -145,7 +145,7 @@ const Home: NextPage = () => {
                               strokeLinejoin="round"
                             />
                           </svg>
-                          <span className="text-[#f4f814] text-sm ml-1">{`${post?._count?.GoVote}`}</span>
+                          <span className="text-[#f4f814] text-sm ml-1">{`${post?._count?.Like}`}</span>
                         </div>
                         <div className="flex">
                           <span className="mt-1 ml-1">
