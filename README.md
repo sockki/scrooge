@@ -2,8 +2,7 @@
 
 카카오톡 거지 오픈 채팅방을 모티브로 만든 커뮤니티 입니다.
 
-**사이트 링크:** <https://scrooge-chi.vercel.app/>                 
-**개발 일지:** <https://github.com/sockki/scrooge/blob/master/%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.md>               
+**사이트 링크:** <https://scrooge-chi.vercel.app/>                              
 
 여러분들의 소비습관 및 소비일지를 Scrooge를 통해서 다른 사람들과 공유하고 관리해보세요!
 
